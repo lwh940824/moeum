@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CategoryGroupMapper {
 
-    @Mapping(source = "categoryGroup.categoryGroupId", target = "categoryGroupId")
     CategoryGroupResponseDto toDto(CategoryGroup categoryGroup);
 
     @Mapping(target = "categoryGroupId", ignore = true)
