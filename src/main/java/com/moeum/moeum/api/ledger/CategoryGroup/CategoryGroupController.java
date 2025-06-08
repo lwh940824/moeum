@@ -28,6 +28,9 @@ public class CategoryGroupController {
 
     @PostMapping
     public ResponseEntity<CategoryGroupResponseDto> postCategoryGroup(@RequestBody CategoryGroupCreateRequestDto categoryGroupCreateRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryGroupService.create(categoryGroupCreateRequestDto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(
+                        categoryGroupService.create(categoryGroupCreateRequestDto)
+                );
     }
 }

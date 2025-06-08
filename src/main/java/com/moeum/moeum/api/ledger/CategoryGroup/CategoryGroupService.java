@@ -5,6 +5,8 @@ import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
 import com.moeum.moeum.domain.CategoryGroup;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +33,7 @@ public class CategoryGroupService {
 
     @Transactional
     public CategoryGroupResponseDto create(CategoryGroupCreateRequestDto categoryGroupCreateRequestDto) {
+        SecurityContextHolder.getContext().getAuthentication().getAuthorities();
         return categoryGroupMapper.toDto(
                 categoryGroupRepository.save(categoryGroupMapper.toEntity(categoryGroupCreateRequestDto))
         );

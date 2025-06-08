@@ -22,6 +22,8 @@ public class User extends BaseEntity {
     @Column(length = 100)
     private String password;
 
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
@@ -34,9 +36,10 @@ public class User extends BaseEntity {
     private String providerId;
 
     @Builder
-    public User(String activate_id, String password, RoleType roleType, String address, String email, String provider, String providerId) {
+    public User(String activate_id, String password, String name, RoleType roleType, String address, String email, String provider, String providerId) {
         this.activate_id = activate_id;
         this.password = password;
+        this.name = name;
         this.roleType = roleType;
         this.address = address;
         this.email = email;
