@@ -1,0 +1,19 @@
+package com.moeum.moeum.global.exception;
+
+import lombok.Builder;
+
+@Builder
+public record ErrorResponseDto(
+        int status,
+        String code,
+        String message
+
+) {
+    public static ErrorResponseDto of(ErrorCode errorCode) {
+        return new ErrorResponseDto(
+                errorCode.getStatus().value(),
+                errorCode.name(),
+                errorCode.getMessage()
+        );
+    }
+}
