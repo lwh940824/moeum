@@ -2,9 +2,11 @@ package com.moeum.moeum.api.ledger.CategoryGroup;
 
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupCreateRequestDto;
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
+import com.moeum.moeum.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,10 +29,29 @@ public class CategoryGroupController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryGroupResponseDto> postCategoryGroup(@RequestBody CategoryGroupCreateRequestDto categoryGroupCreateRequestDto) {
+    public ResponseEntity<CategoryGroupResponseDto> postCategoryGroup(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody CategoryGroupCreateRequestDto categoryGroupCreateRequestDto
+    ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
-                        categoryGroupService.create(categoryGroupCreateRequestDto)
+                        categoryGroupService.create(userDetails.getUserId(), categoryGroupCreateRequestDto)
                 );
+    }
+
+    @PutMapping("/{categoryGroupId}")
+    public ResponseEntity<CategoryGroupResponseDto> updateCategoryGroup(
+            @PathVariable Long categoryGroupId,
+            @RequestBody CategoryGroupCreateRequestDto categoryGroupCreateRequestDto
+    ) {
+        return ResponseEntity.ok(
+                categoryGroupService.update(categoryGroupId, categoryGroupCreateRequestDto)
+        );
+    }
+
+    @DeleteMapping("/{categoryGroupId}")
+    public ResponseEntity<Void> deleteCategoryGroup(@PathVariable Long categoryGroupId) {
+        categoryGroupService.delete(categoryGroupId);
+        return ResponseEntity.noContent().build();
     }
 }

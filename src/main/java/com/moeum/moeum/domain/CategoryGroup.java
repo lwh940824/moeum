@@ -34,6 +34,11 @@ public class CategoryGroup extends BaseEntity{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public void update(String name, CategoryType categoryType) {
+        this.name = name;
+        this.categoryType = categoryType;
+    }
+
     public void assignUser(User user) {
         this.user = user;
     }
