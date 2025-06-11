@@ -16,9 +16,10 @@ public class CategoryGroup extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Long categoryGroupId;
+    @Column(name = "category_group_id")
+    private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 10)
     private String name;
 
     @Column(nullable = false)

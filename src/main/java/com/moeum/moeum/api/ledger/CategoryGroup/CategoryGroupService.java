@@ -3,9 +3,8 @@ package com.moeum.moeum.api.ledger.CategoryGroup;
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupCreateRequestDto;
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupUpdateRequestDto;
-import com.moeum.moeum.api.ledger.User.UserRepository;
+import com.moeum.moeum.api.ledger.User.UserService;
 import com.moeum.moeum.domain.CategoryGroup;
-import com.moeum.moeum.domain.User;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +19,7 @@ public class CategoryGroupService {
 
     CategoryGroupMapper categoryGroupMapper;
     CategoryGroupRepository categoryGroupRepository;
-    UserRepository userRepository;
+    UserService userService;
 
     public List<CategoryGroupResponseDto> findAllByUserId(Long userId) {
         return categoryGroupRepository.findAllByUserId(userId).stream()
@@ -38,14 +36,11 @@ public class CategoryGroupService {
 
     @Transactional
     public CategoryGroupResponseDto create(Long userId, CategoryGroupCreateRequestDto categoryGroupCreateRequestDto) {
-        // 해당 유저가 만든 카테고리그룹 이름이 이미 존재하는 경우
         categoryGroupRepository.findByUserIdAndName(userId, categoryGroupCreateRequestDto.name())
                 .ifPresent(categoryGroup -> {throw new CustomException(ErrorCode.EXISTS_CATEGORY_GROUP);});
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.EXISTS_CATEGORY_GROUP));
-
         CategoryGroup categoryGroup = categoryGroupMapper.toEntity(categoryGroupCreateRequestDto);
-        categoryGroup.assignUser(user);
+        categoryGroup.assignUser(userService.getEntity(userId));
 
         return categoryGroupMapper.toDto(
                 categoryGroupRepository.save(categoryGroupMapper.toEntity(categoryGroupCreateRequestDto))
@@ -53,8 +48,8 @@ public class CategoryGroupService {
     }
 
     @Transactional
-    public CategoryGroupResponseDto update(Long categoryGroupId, CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto) {
-        CategoryGroup categoryGroup = categoryGroupRepository.findByCategoryGroupId(categoryGroupId)
+    public CategoryGroupResponseDto update(Long userId, Long categoryGroupId, CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto) {
+        CategoryGroup categoryGroup = categoryGroupRepository.findByUserIdAndId(userId, categoryGroupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY_GROUP));
 
         categoryGroup.update(
@@ -67,7 +62,12 @@ public class CategoryGroupService {
     }
 
     @Transactional
-    public void delete(Long categoryGroupId) {
-        categoryGroupRepository.deleteById(categoryGroupId);
+    public void delete(Long userId, Long categoryGroupId) {
+        // 존재하지 않아도 예외가 발생하지 않기에 지양
+        // categoryGroupRepository.deleteByUserIdAndId(userId, categoryGroupId);
+        CategoryGroup categoryGroup = categoryGroupRepository.findByUserIdAndId(userId, categoryGroupId)
+                .orElseThrow(() -> new CustomException(ErrorCode.EXISTS_CATEGORY_GROUP));
+
+        categoryGroupRepository.delete(categoryGroup);
     }
 }

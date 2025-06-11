@@ -4,6 +4,7 @@ import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupCreateRequestDt
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupUpdateRequestDto;
 import com.moeum.moeum.global.security.CustomUserDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class CategoryGroupController {
     private final CategoryGroupService categoryGroupService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryGroupResponseDto>> getAllCategoryGroup(@RequestParam Long userId) {
-        return ResponseEntity.ok(categoryGroupService.findAllByUserId(userId));
+    public ResponseEntity<List<CategoryGroupResponseDto>> getAllCategoryGroup(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(categoryGroupService.findAllByUserId(userDetails.getId()));
     }
 
     @GetMapping("/{categoryGroupId}")
@@ -32,27 +33,28 @@ public class CategoryGroupController {
     @PostMapping
     public ResponseEntity<CategoryGroupResponseDto> postCategoryGroup(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody CategoryGroupCreateRequestDto categoryGroupCreateRequestDto
+            @RequestBody @Valid CategoryGroupCreateRequestDto categoryGroupCreateRequestDto
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
-                        categoryGroupService.create(userDetails.getUserId(), categoryGroupCreateRequestDto)
+                        categoryGroupService.create(userDetails.getId(), categoryGroupCreateRequestDto)
                 );
     }
 
     @PutMapping("/{categoryGroupId}")
     public ResponseEntity<CategoryGroupResponseDto> updateCategoryGroup(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable Long categoryGroupId,
-            @RequestBody CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto
+            @RequestBody @Valid CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto
     ) {
         return ResponseEntity.ok(
-                categoryGroupService.update(categoryGroupId, categoryGroupUpdateRequestDto)
+                categoryGroupService.update(userDetails.getId(), categoryGroupId, categoryGroupUpdateRequestDto)
         );
     }
 
     @DeleteMapping("/{categoryGroupId}")
-    public ResponseEntity<Void> deleteCategoryGroup(@PathVariable Long categoryGroupId) {
-        categoryGroupService.delete(categoryGroupId);
+    public ResponseEntity<Void> deleteCategoryGroup(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long categoryGroupId) {
+        categoryGroupService.delete(userDetails.getId(), categoryGroupId);
         return ResponseEntity.noContent().build();
     }
 }

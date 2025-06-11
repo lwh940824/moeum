@@ -11,5 +11,5 @@ public interface CategoryGroupRepository extends JpaRepository<CategoryGroup, Lo
 
     Optional<CategoryGroup> findByUserIdAndName(Long userId, String name);
 
-    Optional<CategoryGroup> findByCategoryGroupId(Long categoryGroupId);
+    Optional<CategoryGroup> findByUserIdAndId(Long userId, Long categoryGroupId);
 }
