@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDto> handleValidationException() {
+    public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException ex) {
         ErrorCode error = ErrorCode.VALIDATION_ERROR;
 
         return ResponseEntity.status(error.getStatus())
-                .body(ErrorResponseDto.of(error));
+                .body(ErrorResponseDto.of(error, ex));
     }
 
 
