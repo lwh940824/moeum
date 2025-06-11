@@ -2,6 +2,7 @@ package com.moeum.moeum.api.ledger.CategoryGroup;
 
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupCreateRequestDto;
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
+import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupUpdateRequestDto;
 import com.moeum.moeum.api.ledger.User.UserRepository;
 import com.moeum.moeum.domain.CategoryGroup;
 import com.moeum.moeum.domain.User;
@@ -46,21 +47,20 @@ public class CategoryGroupService {
         CategoryGroup categoryGroup = categoryGroupMapper.toEntity(categoryGroupCreateRequestDto);
         categoryGroup.assignUser(user);
 
-        // User 엔티티 넣어줘야함
         return categoryGroupMapper.toDto(
                 categoryGroupRepository.save(categoryGroupMapper.toEntity(categoryGroupCreateRequestDto))
         );
     }
 
     @Transactional
-    public CategoryGroupResponseDto update(Long categoryGroupId, CategoryGroupCreateRequestDto categoryGroupCreateRequestDto) {
-        // TODO: categoryId로 찾아야할지 userId로 찾아야할지
+    public CategoryGroupResponseDto update(Long categoryGroupId, CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto) {
         CategoryGroup categoryGroup = categoryGroupRepository.findByCategoryGroupId(categoryGroupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY_GROUP));
 
         categoryGroup.update(
-                categoryGroupCreateRequestDto.name(),
-                categoryGroupCreateRequestDto.categoryType()
+                categoryGroupUpdateRequestDto.name(),
+                categoryGroupUpdateRequestDto.categoryType(),
+                categoryGroupUpdateRequestDto.imageUrl()
         );
 
         return categoryGroupMapper.toDto(categoryGroup);

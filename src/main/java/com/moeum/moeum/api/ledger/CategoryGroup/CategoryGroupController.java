@@ -2,6 +2,7 @@ package com.moeum.moeum.api.ledger.CategoryGroup;
 
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupCreateRequestDto;
 import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
+import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupUpdateRequestDto;
 import com.moeum.moeum.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,10 +43,10 @@ public class CategoryGroupController {
     @PutMapping("/{categoryGroupId}")
     public ResponseEntity<CategoryGroupResponseDto> updateCategoryGroup(
             @PathVariable Long categoryGroupId,
-            @RequestBody CategoryGroupCreateRequestDto categoryGroupCreateRequestDto
+            @RequestBody CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto
     ) {
         return ResponseEntity.ok(
-                categoryGroupService.update(categoryGroupId, categoryGroupCreateRequestDto)
+                categoryGroupService.update(categoryGroupId, categoryGroupUpdateRequestDto)
         );
     }
 

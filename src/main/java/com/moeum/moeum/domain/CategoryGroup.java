@@ -25,6 +25,7 @@ public class CategoryGroup extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private CategoryType categoryType;
 
+    @Column(nullable = false)
     private String imageUrl;
 
     @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -34,9 +35,10 @@ public class CategoryGroup extends BaseEntity{
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public void update(String name, CategoryType categoryType) {
+    public void update(String name, CategoryType categoryType, String imageUrl) {
         this.name = name;
         this.categoryType = categoryType;
+        this.imageUrl = imageUrl;
     }
 
     public void assignUser(User user) {
@@ -44,7 +46,7 @@ public class CategoryGroup extends BaseEntity{
     }
 
     @Builder
-    public CategoryGroup(Long categoryGroupId, String name, CategoryType categoryType, String imageUrl, List<Category> categoryList, User user) {
+    public CategoryGroup(String name, CategoryType categoryType, String imageUrl, List<Category> categoryList, User user) {
         this.name = name;
         this.categoryType = categoryType;
         this.imageUrl = imageUrl;
