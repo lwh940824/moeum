@@ -26,7 +26,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return ""; // 비밀번호 미사용
+        return "";
     }
 
     @Override
