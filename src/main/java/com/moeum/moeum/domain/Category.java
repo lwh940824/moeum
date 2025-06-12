@@ -15,8 +15,10 @@ public class Category extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Integer categoryId;
+    @Column(name = "categoryId")
+    private Integer id;
 
+    @Column(nullable = false, length = 10)
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -33,7 +35,7 @@ public class Category extends BaseEntity{
     private CategoryGroup categoryGroup;
 
     @Builder
-    public Category(Integer categoryId, String name, RecurringType recurringType, LocalDateTime recurring_start_dt, LocalDateTime recurring_end_dt, String imageUrl, CategoryGroup categoryGroup) {
+    public Category(String name, RecurringType recurringType, LocalDateTime recurring_start_dt, LocalDateTime recurring_end_dt, String imageUrl, CategoryGroup categoryGroup) {
         this.name = name;
         this.recurringType = recurringType;
         this.recurring_start_dt = recurring_start_dt;

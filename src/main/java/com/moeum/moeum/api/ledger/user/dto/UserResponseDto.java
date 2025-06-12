@@ -1,4 +1,4 @@
-package com.moeum.moeum.api.ledger.User.dto;
+package com.moeum.moeum.api.ledger.user.dto;
 
 public record UserResponseDto(
         String email,
