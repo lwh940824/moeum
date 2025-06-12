@@ -1,4 +1,4 @@
-package com.moeum.moeum.api.ledger.CategoryGroup;
+package com.moeum.moeum.api.ledger.categoryGroup;
 
 import com.moeum.moeum.domain.CategoryGroup;
 import org.springframework.data.jpa.repository.JpaRepository;

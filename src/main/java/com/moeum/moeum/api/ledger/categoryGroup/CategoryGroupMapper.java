@@ -1,7 +1,7 @@
-package com.moeum.moeum.api.ledger.CategoryGroup;
+package com.moeum.moeum.api.ledger.categoryGroup;
 
-import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupCreateRequestDto;
-import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
+import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupCreateRequestDto;
+import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupResponseDto;
 import com.moeum.moeum.domain.CategoryGroup;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

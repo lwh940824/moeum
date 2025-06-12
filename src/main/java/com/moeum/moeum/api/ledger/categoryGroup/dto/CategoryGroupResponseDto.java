@@ -1,4 +1,4 @@
-package com.moeum.moeum.api.ledger.CategoryGroup.dto;
+package com.moeum.moeum.api.ledger.categoryGroup.dto;
 
 import com.moeum.moeum.type.CategoryType;
 import lombok.Builder;

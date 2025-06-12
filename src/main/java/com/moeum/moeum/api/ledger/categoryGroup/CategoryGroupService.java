@@ -1,8 +1,8 @@
-package com.moeum.moeum.api.ledger.CategoryGroup;
+package com.moeum.moeum.api.ledger.categoryGroup;
 
-import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupCreateRequestDto;
-import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupResponseDto;
-import com.moeum.moeum.api.ledger.CategoryGroup.dto.CategoryGroupUpdateRequestDto;
+import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupCreateRequestDto;
+import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupResponseDto;
+import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupUpdateRequestDto;
 import com.moeum.moeum.api.ledger.User.UserService;
 import com.moeum.moeum.domain.CategoryGroup;
 import com.moeum.moeum.global.exception.CustomException;
