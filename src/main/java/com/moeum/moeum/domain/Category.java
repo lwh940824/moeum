@@ -1,8 +1,10 @@
 package com.moeum.moeum.domain;
 
 import com.moeum.moeum.type.RecurringType;
+import com.moeum.moeum.type.YnType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
@@ -21,26 +23,33 @@ public class Category extends BaseEntity{
     @Column(nullable = false, length = 10)
     private String name;
 
+    private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private YnType investmentYn;
+
     @Enumerated(EnumType.STRING)
     private RecurringType recurringType;
 
-    private LocalDateTime recurring_start_dt;
+    private LocalDateTime recurringStartDt;
 
-    private LocalDateTime recurring_end_dt;
-
-    private String imageUrl;
+    private LocalDateTime recurringEndDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_group_id", nullable = false)
     private CategoryGroup categoryGroup;
 
+    // TODO: 카테고리 그룹 넣어줘야함
+
     @Builder
-    public Category(String name, RecurringType recurringType, LocalDateTime recurring_start_dt, LocalDateTime recurring_end_dt, String imageUrl, CategoryGroup categoryGroup) {
+    public Category(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, CategoryGroup categoryGroup) {
         this.name = name;
-        this.recurringType = recurringType;
-        this.recurring_start_dt = recurring_start_dt;
-        this.recurring_end_dt = recurring_end_dt;
         this.imageUrl = imageUrl;
+        this.investmentYn = investmentYn;
+        this.recurringType = recurringType;
+        this.recurringStartDt = recurringStartDt;
+        this.recurringEndDt = recurringEndDt;
         this.categoryGroup = categoryGroup;
     }
 }

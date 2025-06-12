@@ -30,7 +30,7 @@ public class CategoryGroupService {
     public CategoryGroupResponseDto findById(Long categoryGroupId) {
         return categoryGroupMapper.toDto(
                 categoryGroupRepository.findById(categoryGroupId)
-                        .orElseThrow(() -> new RuntimeException("카테고리 그룹이 존재하지 않습니다."))
+                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY_GROUP))
         );
     }
 

@@ -19,6 +19,7 @@ public class Payment extends BaseEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentType paymentType;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -18,6 +18,7 @@ public class LedgerAssetPlan extends BaseEntity {
     private Integer interest_rate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private InterestType interestType;
 
     @OneToOne
