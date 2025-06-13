@@ -42,15 +42,12 @@ public class CategoryGroupService {
         CategoryGroup categoryGroup = categoryGroupMapper.toEntity(categoryGroupCreateRequestDto);
         categoryGroup.assignUser(userService.getEntity(userId));
 
-        return categoryGroupMapper.toDto(
-                categoryGroupRepository.save(categoryGroupMapper.toEntity(categoryGroupCreateRequestDto))
-        );
+        return categoryGroupMapper.toDto(categoryGroupRepository.save(categoryGroup));
     }
 
     @Transactional
     public CategoryGroupResponseDto update(Long userId, Long categoryGroupId, CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto) {
-        CategoryGroup categoryGroup = categoryGroupRepository.findByUserIdAndId(userId, categoryGroupId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY_GROUP));
+        CategoryGroup categoryGroup = getEntity(userId, categoryGroupId);
 
         categoryGroup.update(
                 categoryGroupUpdateRequestDto.name(),
@@ -65,9 +62,13 @@ public class CategoryGroupService {
     public void delete(Long userId, Long categoryGroupId) {
         // 존재하지 않아도 예외가 발생하지 않기에 지양
         // categoryGroupRepository.deleteByUserIdAndId(userId, categoryGroupId);
-        CategoryGroup categoryGroup = categoryGroupRepository.findByUserIdAndId(userId, categoryGroupId)
-                .orElseThrow(() -> new CustomException(ErrorCode.EXISTS_CATEGORY_GROUP));
+        CategoryGroup categoryGroup = getEntity(userId, categoryGroupId);
 
         categoryGroupRepository.delete(categoryGroup);
+    }
+
+    public CategoryGroup getEntity(Long userId, Long categoryGroupId) {
+        return categoryGroupRepository.findByUserIdAndId(userId, categoryGroupId)
+                .orElseThrow(() -> new CustomException(ErrorCode.EXISTS_CATEGORY_GROUP));
     }
 }

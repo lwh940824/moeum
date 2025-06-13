@@ -2,7 +2,9 @@ package com.moeum.moeum.api.ledger.category;
 
 import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
+import com.moeum.moeum.api.ledger.categoryGroup.CategoryGroupService;
 import com.moeum.moeum.domain.Category;
+import com.moeum.moeum.domain.CategoryGroup;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ public class CategoryService {
 
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
+    private final CategoryGroupService categoryGroupService;
 
     public List<CategoryResponseDto> findAllByUserId(Long userId) {
         return categoryRepository.findAllByUserId(userId).stream()
@@ -35,8 +38,11 @@ public class CategoryService {
                 .ifPresent(category -> {throw new CustomException(ErrorCode.EXISTS_CATEGORY);});
 
         Category category = categoryMapper.toEntity(categoryRequestDto);
+        CategoryGroup categoryGroup = categoryGroupService.getEntity(userId, categoryRequestDto.categoryGroupId());
+        categoryGroup.addCategory(category);
 
-        categoryRepository.save(category);
-        return new CategoryResponseDto();
+        return categoryMapper.toDto(categoryRepository.save(category));
     }
+
+
 }

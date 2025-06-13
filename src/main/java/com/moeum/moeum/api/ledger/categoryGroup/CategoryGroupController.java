@@ -35,10 +35,9 @@ public class CategoryGroupController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody @Valid CategoryGroupCreateRequestDto categoryGroupCreateRequestDto
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(
-                        categoryGroupService.create(userDetails.getId(), categoryGroupCreateRequestDto)
-                );
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                categoryGroupService.create(userDetails.getId(), categoryGroupCreateRequestDto)
+        );
     }
 
     @PutMapping("/{categoryGroupId}")

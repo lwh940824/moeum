@@ -4,6 +4,7 @@ import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
 import com.moeum.moeum.global.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,8 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryResponseDto> postCategory(@AuthenticationPrincipal CustomUserDetails userDetails, CategoryCreateRequestDto categoryCreateRequestDto) {
-        categoryService.create(userDetails.getId(), categoryCreateRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                categoryService.create(userDetails.getId(), categoryCreateRequestDto)
+        );
     }
 }

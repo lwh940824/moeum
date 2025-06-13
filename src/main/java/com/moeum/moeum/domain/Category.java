@@ -1,5 +1,7 @@
 package com.moeum.moeum.domain;
 
+import com.moeum.moeum.global.exception.CustomException;
+import com.moeum.moeum.global.exception.ErrorCode;
 import com.moeum.moeum.type.RecurringType;
 import com.moeum.moeum.type.YnType;
 import jakarta.persistence.*;
@@ -40,7 +42,12 @@ public class Category extends BaseEntity{
     @JoinColumn(name = "category_group_id", nullable = false)
     private CategoryGroup categoryGroup;
 
-    // TODO: 카테고리 그룹 넣어줘야함
+    public void changeCategoryGroup(CategoryGroup categoryGroup) {
+        if (categoryGroup == null) throw new CustomException(ErrorCode.REQUIRED_CATEGORY_GROUP);
+        if (this.categoryGroup != null) this.categoryGroup.getCategoryList().remove(this);
+
+        this.categoryGroup = categoryGroup;
+    }
 
     @Builder
     public Category(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, CategoryGroup categoryGroup) {

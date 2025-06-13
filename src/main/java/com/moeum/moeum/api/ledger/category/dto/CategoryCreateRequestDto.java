@@ -20,5 +20,5 @@ public record CategoryCreateRequestDto(
         RecurringType recurringType,
         LocalDateTime recurringStartDt,
         LocalDateTime recurringEndDt,
-        Long categoryGroupId
+        @NotNull Long categoryGroupId
 ) {}

@@ -46,6 +46,11 @@ public class CategoryGroup extends BaseEntity{
         this.user = user;
     }
 
+    public void addCategory(Category category) {
+        category.changeCategoryGroup(this);
+        this.categoryList.add(category);
+    }
+
     @Builder
     public CategoryGroup(String name, CategoryType categoryType, String imageUrl, List<Category> categoryList, User user) {
         this.name = name;
