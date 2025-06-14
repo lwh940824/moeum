@@ -42,6 +42,16 @@ public class Category extends BaseEntity{
     @JoinColumn(name = "category_group_id", nullable = false)
     private CategoryGroup categoryGroup;
 
+    @Builder
+    public void update(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.investmentYn = investmentYn;
+        this.recurringType = recurringType;
+        this.recurringStartDt = recurringStartDt;
+        this.recurringEndDt = recurringEndDt;
+    }
+
     public void changeCategoryGroup(CategoryGroup categoryGroup) {
         if (categoryGroup == null) throw new CustomException(ErrorCode.REQUIRED_CATEGORY_GROUP);
         if (this.categoryGroup != null) this.categoryGroup.getCategoryList().remove(this);
@@ -49,15 +59,15 @@ public class Category extends BaseEntity{
         this.categoryGroup = categoryGroup;
     }
 
-    @Builder
-    public Category(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, CategoryGroup categoryGroup) {
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.investmentYn = investmentYn;
-        this.recurringType = recurringType;
-        this.recurringStartDt = recurringStartDt;
-        this.recurringEndDt = recurringEndDt;
-        this.categoryGroup = categoryGroup;
-    }
+//    @Builder
+//    public Category(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, CategoryGroup categoryGroup) {
+//        this.name = name;
+//        this.imageUrl = imageUrl;
+//        this.investmentYn = investmentYn;
+//        this.recurringType = recurringType;
+//        this.recurringStartDt = recurringStartDt;
+//        this.recurringEndDt = recurringEndDt;
+//        this.categoryGroup = categoryGroup;
+//    }
 }
 

@@ -26,10 +26,10 @@ public class Payment extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Builder
-    public Payment(Long paymentId, String name, PaymentType paymentType, User user) {
-        this.name = name;
-        this.paymentType = paymentType;
-        this.user = user;
-    }
+//    @Builder
+//    public Payment(Long paymentId, String name, PaymentType paymentType, User user) {
+//        this.name = name;
+//        this.paymentType = paymentType;
+//        this.user = user;
+//    }
 }

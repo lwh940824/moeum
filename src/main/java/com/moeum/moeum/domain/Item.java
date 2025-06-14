@@ -28,11 +28,11 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
 
-    @Builder
-    public Item(Long itemId, Long amount, LocalDateTime occurred_at, Category category, Payment payment) {
-        this.amount = amount;
-        this.occurred_at = occurred_at;
-        this.category = category;
-        this.payment = payment;
-    }
+//    @Builder
+//    public Item(Long itemId, Long amount, LocalDateTime occurred_at, Category category, Payment payment) {
+//        this.amount = amount;
+//        this.occurred_at = occurred_at;
+//        this.category = category;
+//        this.payment = payment;
+//    }
 }

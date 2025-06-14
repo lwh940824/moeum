@@ -25,10 +25,10 @@ public class LedgerAssetPlan extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Builder
-    public LedgerAssetPlan(Integer assetPlanId, Integer interest_rate, InterestType interestType, Category category) {
-        this.interest_rate = interest_rate;
-        this.interestType = interestType;
-        this.category = category;
-    }
+//    @Builder
+//    public LedgerAssetPlan(Integer assetPlanId, Integer interest_rate, InterestType interestType, Category category) {
+//        this.interest_rate = interest_rate;
+//        this.interestType = interestType;
+//        this.category = category;
+//    }
 }
