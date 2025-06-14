@@ -7,7 +7,11 @@ import lombok.Builder;
 
 @Builder
 public record CategoryGroupUpdateRequestDto (
-        @NotBlank @Size(max = 10) String name,
-        @NotBlank CategoryType categoryType,
-        @NotBlank String imageUrl
+        @NotBlank(message = "카테고리 이름은 필수 입력입니다.")
+        @Size(max = 10, message = "카테고리 이름은 10자 이내입니다.")
+        String name,
+        @NotBlank
+        CategoryType categoryType,
+        @NotBlank
+        String imageUrl
 ) {}

@@ -2,7 +2,9 @@ package com.moeum.moeum.api.ledger.category;
 
 import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
+import com.moeum.moeum.api.ledger.category.dto.CategoryUpdateRequestDto;
 import com.moeum.moeum.global.security.CustomUserDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +35,21 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 categoryService.create(userDetails.getId(), categoryCreateRequestDto)
         );
+    }
+
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponseDto> updateCategory(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable @Valid Long categoryId,
+            CategoryUpdateRequestDto categoryUpdateRequestDto) {
+        return ResponseEntity.ok(
+                categoryService.update(userDetails.getId(), categoryId, categoryUpdateRequestDto)
+        );
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long categoryId) {
+        categoryService.delete(userDetails.getId(), categoryId);
+        return ResponseEntity.noContent().build();
     }
 }
