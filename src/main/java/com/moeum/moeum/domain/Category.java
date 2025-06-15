@@ -6,16 +6,17 @@ import com.moeum.moeum.type.RecurringType;
 import com.moeum.moeum.type.YnType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "ledger_category")
-public class Category extends BaseEntity{
+public class Category extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -42,6 +43,9 @@ public class Category extends BaseEntity{
     @JoinColumn(name = "category_group_id", nullable = false)
     private CategoryGroup categoryGroup;
 
+    @OneToMany(mappedBy = "item")
+    private List<Item> itemList = new ArrayList<>();
+
     @Builder
     public void update(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt) {
         this.name = name;
@@ -55,6 +59,10 @@ public class Category extends BaseEntity{
     public void changeCategoryGroup(CategoryGroup categoryGroup) {
         if (categoryGroup == null) throw new CustomException(ErrorCode.REQUIRED_CATEGORY_GROUP);
         if (this.categoryGroup != null) this.categoryGroup.getCategoryList().remove(this);
+
+        if (!categoryGroup.getCategoryList().contains(this)) {
+            categoryGroup.getCategoryList().add(this);
+        }
 
         this.categoryGroup = categoryGroup;
     }

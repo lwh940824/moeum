@@ -27,11 +27,8 @@ public class CategoryService {
                 .toList();
     }
 
-    public CategoryResponseDto findById(Long categoryId) {
-        return categoryMapper.toDto(
-                categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY))
-        );
+    public CategoryResponseDto findByUserIdAndId(Long userId, Long categoryId) {
+        return categoryMapper.toDto(getEntity(userId, categoryId));
     }
 
     public CategoryResponseDto create(Long userId, CategoryCreateRequestDto categoryRequestDto) {
@@ -40,7 +37,7 @@ public class CategoryService {
 
         Category category = categoryMapper.toEntity(categoryRequestDto);
         CategoryGroup categoryGroup = categoryGroupService.getEntity(userId, categoryRequestDto.categoryGroupId());
-        categoryGroup.addCategory(category);
+        category.changeCategoryGroup(categoryGroup);
 
         return categoryMapper.toDto(categoryRepository.save(category));
     }

@@ -46,9 +46,7 @@ public class CategoryGroupController {
             @PathVariable Long categoryGroupId,
             @RequestBody @Valid CategoryGroupUpdateRequestDto categoryGroupUpdateRequestDto
     ) {
-        return ResponseEntity.ok(
-                categoryGroupService.update(userDetails.getId(), categoryGroupId, categoryGroupUpdateRequestDto)
-        );
+        return ResponseEntity.ok(categoryGroupService.update(userDetails.getId(), categoryGroupId, categoryGroupUpdateRequestDto));
     }
 
     @DeleteMapping("/{categoryGroupId}")

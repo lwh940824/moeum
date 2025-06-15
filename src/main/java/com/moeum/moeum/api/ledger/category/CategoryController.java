@@ -26,25 +26,24 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable Long categoryId) {
-        return ResponseEntity.ok(categoryService.findById(categoryId));
+    public ResponseEntity<CategoryResponseDto> getCategory(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long categoryId) {
+        return ResponseEntity.ok(categoryService.findByUserIdAndId(userDetails.getId(), categoryId));
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDto> postCategory(@AuthenticationPrincipal CustomUserDetails userDetails, CategoryCreateRequestDto categoryCreateRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                categoryService.create(userDetails.getId(), categoryCreateRequestDto)
-        );
+    public ResponseEntity<CategoryResponseDto> postCategory(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody @Valid CategoryCreateRequestDto categoryCreateRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(categoryService.create(userDetails.getId(), categoryCreateRequestDto));
     }
 
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryResponseDto> updateCategory(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable @Valid Long categoryId,
-            CategoryUpdateRequestDto categoryUpdateRequestDto) {
-        return ResponseEntity.ok(
-                categoryService.update(userDetails.getId(), categoryId, categoryUpdateRequestDto)
-        );
+            @RequestBody @Valid CategoryUpdateRequestDto categoryUpdateRequestDto) {
+        return ResponseEntity.ok(categoryService.update(userDetails.getId(), categoryId, categoryUpdateRequestDto));
     }
 
     @DeleteMapping("/{categoryId}")

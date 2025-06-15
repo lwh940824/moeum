@@ -2,7 +2,10 @@ package com.moeum.moeum.domain;
 
 import com.moeum.moeum.type.CategoryType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +47,6 @@ public class CategoryGroup extends BaseEntity{
 
     public void assignUser(User user) {
         this.user = user;
-    }
-
-    public void addCategory(Category category) {
-        category.changeCategoryGroup(this);
-        this.categoryList.add(category);
     }
 
 //    @Builder
