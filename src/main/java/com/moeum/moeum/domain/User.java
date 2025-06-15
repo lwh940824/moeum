@@ -36,15 +36,15 @@ public class User extends BaseEntity {
 
     private String providerId;
 
-//    @Builder
-//    public User(String activate_id, String password, String name, RoleType roleType, String address, String email, String provider, String providerId) {
-//        this.activate_id = activate_id;
-//        this.password = password;
-//        this.name = name;
-//        this.roleType = roleType;
-//        this.address = address;
-//        this.email = email;
-//        this.provider = provider;
-//        this.providerId = providerId;
-//    }
+    @Builder
+    public User(String activate_id, String password, String name, RoleType roleType, String address, String email, String provider, String providerId) {
+        this.activate_id = activate_id;
+        this.password = password;
+        this.name = name;
+        this.roleType = roleType;
+        this.address = address;
+        this.email = email;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 }
