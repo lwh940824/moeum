@@ -1,5 +1,6 @@
-package com.moeum.moeum.api.ledger.category;
+package com.moeum.moeum.api.ledger.category.controller;
 
+import com.moeum.moeum.api.ledger.category.service.CategoryService;
 import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryUpdateRequestDto;

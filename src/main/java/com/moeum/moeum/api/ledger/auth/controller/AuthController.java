@@ -1,5 +1,6 @@
-package com.moeum.moeum.api.ledger.auth;
+package com.moeum.moeum.api.ledger.auth.controller;
 
+import com.moeum.moeum.api.ledger.auth.service.AuthService;
 import com.moeum.moeum.api.ledger.auth.dto.GoogleLoginRequestDto;
 import com.moeum.moeum.api.ledger.auth.dto.JwtResponseDto;
 import lombok.RequiredArgsConstructor;

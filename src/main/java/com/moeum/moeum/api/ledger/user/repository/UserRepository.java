@@ -1,4 +1,4 @@
-package com.moeum.moeum.api.ledger.user;
+package com.moeum.moeum.api.ledger.user.repository;
 
 import com.moeum.moeum.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

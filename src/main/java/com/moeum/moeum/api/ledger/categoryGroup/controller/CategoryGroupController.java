@@ -1,8 +1,9 @@
-package com.moeum.moeum.api.ledger.categoryGroup;
+package com.moeum.moeum.api.ledger.categoryGroup.controller;
 
 import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupCreateRequestDto;
 import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupResponseDto;
 import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupUpdateRequestDto;
+import com.moeum.moeum.api.ledger.categoryGroup.service.CategoryGroupService;
 import com.moeum.moeum.global.security.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

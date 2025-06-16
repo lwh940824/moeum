@@ -1,5 +1,6 @@
-package com.moeum.moeum.api.ledger.item;
+package com.moeum.moeum.api.ledger.item.controller;
 
+import com.moeum.moeum.api.ledger.item.service.ItemService;
 import com.moeum.moeum.api.ledger.item.dto.ItemCreateRequestDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemResponseDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemUpdateRequestDto;

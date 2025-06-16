@@ -13,15 +13,15 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "ledger_category")
 public class Category extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    @Column(name = "categoryId")
-    private Integer id;
+    @Column(name = "category_id")
+    private Long id;
 
     @Column(nullable = false, length = 10)
     private String name;
@@ -43,7 +43,7 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "category_group_id", nullable = false)
     private CategoryGroup categoryGroup;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "category")
     private List<Item> itemList = new ArrayList<>();
 
     @Builder
@@ -67,15 +67,15 @@ public class Category extends BaseEntity {
         this.categoryGroup = categoryGroup;
     }
 
-//    @Builder
-//    public Category(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, CategoryGroup categoryGroup) {
-//        this.name = name;
-//        this.imageUrl = imageUrl;
-//        this.investmentYn = investmentYn;
-//        this.recurringType = recurringType;
-//        this.recurringStartDt = recurringStartDt;
-//        this.recurringEndDt = recurringEndDt;
-//        this.categoryGroup = categoryGroup;
-//    }
+    @Builder
+    public Category(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, CategoryGroup categoryGroup) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.investmentYn = investmentYn;
+        this.recurringType = recurringType;
+        this.recurringStartDt = recurringStartDt;
+        this.recurringEndDt = recurringEndDt;
+        this.categoryGroup = categoryGroup;
+    }
 }
 

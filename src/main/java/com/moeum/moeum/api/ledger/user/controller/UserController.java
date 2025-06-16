@@ -1,4 +1,4 @@
-package com.moeum.moeum.api.ledger.user;
+package com.moeum.moeum.api.ledger.user.controller;
 
 import org.springframework.stereotype.Controller;
 

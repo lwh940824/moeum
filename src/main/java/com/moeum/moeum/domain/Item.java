@@ -10,14 +10,15 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "ledger_Item")
 public class Item extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Long itemId;
+    @Column(name = "item_id")
+    private Long id;
 
     private Long amount;
 
@@ -50,11 +51,11 @@ public class Item extends BaseEntity {
         this.category = category;
     }
 
-//    @Builder
-//    public Item(Long itemId, Long amount, LocalDateTime occurred_at, Category category, Payment payment) {
-//        this.amount = amount;
-//        this.occurred_at = occurred_at;
-//        this.category = category;
-//        this.payment = payment;
-//    }
+    @Builder
+    public Item(Long itemId, Long amount, LocalDateTime occurred_at, Category category, Payment payment) {
+        this.amount = amount;
+        this.occurred_at = occurred_at;
+        this.category = category;
+        this.payment = payment;
+    }
 }

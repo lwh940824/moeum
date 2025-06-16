@@ -2,17 +2,14 @@ package com.moeum.moeum.domain;
 
 import com.moeum.moeum.type.CategoryType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "ledger_category_group")
 public class CategoryGroup extends BaseEntity{
@@ -49,12 +46,12 @@ public class CategoryGroup extends BaseEntity{
         this.user = user;
     }
 
-//    @Builder
-//    public CategoryGroup(String name, CategoryType categoryType, String imageUrl, List<Category> categoryList, User user) {
-//        this.name = name;
-//        this.categoryType = categoryType;
-//        this.imageUrl = imageUrl;
-//        this.categoryList = categoryList;
-//        this.user = user;
-//    }
+    @Builder
+    public CategoryGroup(String name, CategoryType categoryType, String imageUrl, List<Category> categoryList, User user) {
+        this.name = name;
+        this.categoryType = categoryType;
+        this.imageUrl = imageUrl;
+        this.categoryList = categoryList;
+        this.user = user;
+    }
 }

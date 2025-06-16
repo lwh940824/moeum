@@ -6,7 +6,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "ledger_payment")
 public class Payment extends BaseEntity {
@@ -26,10 +26,14 @@ public class Payment extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @Builder
-//    public Payment(Long paymentId, String name, PaymentType paymentType, User user) {
-//        this.name = name;
-//        this.paymentType = paymentType;
-//        this.user = user;
-//    }
+    public void assignUser(User user) {
+        this.user = user;
+    }
+
+    @Builder
+    public Payment(Long paymentId, String name, PaymentType paymentType, User user) {
+        this.name = name;
+        this.paymentType = paymentType;
+        this.user = user;
+    }
 }

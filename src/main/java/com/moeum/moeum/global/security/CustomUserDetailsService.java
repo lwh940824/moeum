@@ -1,6 +1,6 @@
 package com.moeum.moeum.global.security;
 
-import com.moeum.moeum.api.ledger.user.UserRepository;
+import com.moeum.moeum.api.ledger.user.repository.UserRepository;
 import com.moeum.moeum.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.AuthorityUtils;

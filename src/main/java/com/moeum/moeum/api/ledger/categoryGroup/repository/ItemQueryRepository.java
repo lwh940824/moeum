@@ -1,13 +1,11 @@
-package com.moeum.moeum.api.ledger.item;
+package com.moeum.moeum.api.ledger.categoryGroup.repository;
 
 import com.moeum.moeum.domain.Item;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {
-
+public interface ItemQueryRepository {
     List<Item> findAllByUserId(Long userId);
 
     Optional<Item> findByUserIdAndId(Long userId, Long itemId);
