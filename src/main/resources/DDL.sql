@@ -86,3 +86,21 @@ CREATE TABLE `ledger_asset_plan` (
     PRIMARY KEY (`id`),
     CONSTRAINT `FK_category_TO_asset_plan` FOREIGN KEY (`category_id`) REFERENCES `ledger_category` (`id`)
 );
+
+-- ledger_payment
+CREATE INDEX idx_ledger_payment_user_id ON ledger_payment(user_id);
+
+-- ledger_category_group
+CREATE INDEX idx_ledger_category_group_user_id ON ledger_category_group(user_id);
+
+-- ledger_category
+CREATE INDEX idx_ledger_category_group_id ON ledger_category(category_group_id);
+
+-- ledger_item
+CREATE INDEX idx_ledger_item_category_id ON ledger_item(category_id);
+CREATE INDEX idx_ledger_item_payment_id ON ledger_item(payment_id);
+CREATE INDEX idx_ledger_item_occurred_at ON ledger_item(occurred_at);
+CREATE INDEX idx_ledger_item_category_occurred_at ON ledger_item(category_id, occurred_at);
+
+-- ledger_asset_plan
+CREATE INDEX idx_ledger_asset_plan_category_id ON ledger_asset_plan(category_id);
