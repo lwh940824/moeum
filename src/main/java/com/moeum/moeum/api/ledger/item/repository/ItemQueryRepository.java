@@ -1,4 +1,4 @@
-package com.moeum.moeum.api.ledger.categoryGroup.repository;
+package com.moeum.moeum.api.ledger.item.repository;
 
 import com.moeum.moeum.domain.Item;
 

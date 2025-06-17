@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "ledger_asset_plan")
-public class LedgerAssetPlan extends BaseEntity {
+public class AssetPlan extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -26,7 +26,7 @@ public class LedgerAssetPlan extends BaseEntity {
     private Category category;
 
     @Builder
-    public LedgerAssetPlan(Integer assetPlanId, Integer interest_rate, InterestType interestType, Category category) {
+    public AssetPlan(Integer assetPlanId, Integer interest_rate, InterestType interestType, Category category) {
         this.interest_rate = interest_rate;
         this.interestType = interestType;
         this.category = category;

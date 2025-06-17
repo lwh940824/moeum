@@ -13,7 +13,7 @@ public class Payment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Long paymentId;
+    private Long id;
 
     @Column(length = 100)
     private String name;

@@ -16,7 +16,6 @@ public class CategoryQueryRepositoryImpl implements CategoryQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-
     @Override
     public List<Category> findAllByUserId(Long userId) {
         QCategory category = QCategory.category;

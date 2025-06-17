@@ -15,14 +15,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    static {
-        System.out.println("✅ SecurityConfig 클래스 로드됨");
-    }
+
     private final JwtAuthenticationFilter jwtFilter;
     private final CorsConfigurationSource corsConfigurationSource;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("✅ SecurityFilterChain 등록됨");
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)

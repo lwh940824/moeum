@@ -17,7 +17,6 @@ public class Item extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    @Column(name = "item_id")
     private Long id;
 
     private Long amount;

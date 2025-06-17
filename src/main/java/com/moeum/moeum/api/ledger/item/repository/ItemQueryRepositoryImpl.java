@@ -1,11 +1,9 @@
 package com.moeum.moeum.api.ledger.item.repository;
 
-import com.moeum.moeum.api.ledger.categoryGroup.repository.ItemQueryRepository;
 import com.moeum.moeum.domain.Item;
 import com.moeum.moeum.domain.QCategory;
 import com.moeum.moeum.domain.QCategoryGroup;
 import com.moeum.moeum.domain.QItem;
-import com.moeum.moeum.global.queryDSL.QuerydslConfig;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

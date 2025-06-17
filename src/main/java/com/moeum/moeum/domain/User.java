@@ -13,7 +13,6 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    @Column(name = "user_id")
     private Long id;
 
     @Column(length = 50)
