@@ -53,5 +53,5 @@ public class ItemController {
             @PathVariable Long itemId) {
         itemService.delete(userDetails.getId(), itemId);
         return ResponseEntity.noContent().build();
-    };
+    }
 }
