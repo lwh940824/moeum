@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/calendar")
@@ -19,11 +21,7 @@ public class CalendarController {
     private final CalendarService calendarService;
 
     @GetMapping
-    public ResponseEntity<CalendarSummaryResponseDto> getCalendar(@AuthenticationPrincipal CustomUserDetails userDetails, CalendarSummaryRequestDto calendarSummaryRequestDto) {
-        calendarService.findItemsByUserAndPeriod(userDetails.getId(), calendarSummaryRequestDto);
-
-        return ResponseEntity.ok(CalendarSummaryResponseDto);
+    public ResponseEntity<List<CalendarSummaryResponseDto>> getCalendar(@AuthenticationPrincipal CustomUserDetails userDetails, CalendarSummaryRequestDto calendarSummaryRequestDto) {
+        return ResponseEntity.ok(calendarService.findItemsByUserAndPeriod(userDetails.getId(), calendarSummaryRequestDto));
     }
-
-    ;
 }

@@ -1,4 +1,9 @@
 package com.moeum.moeum.api.ledger.calendar.dto;
 
-public class CalendarSummaryRequestDto {
-}
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public record CalendarSummaryRequestDto(
+        LocalDateTime startDate,
+        LocalDateTime endDate
+) {}
