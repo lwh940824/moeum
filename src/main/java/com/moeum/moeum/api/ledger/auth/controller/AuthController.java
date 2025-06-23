@@ -18,8 +18,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/google-login")
-    public ResponseEntity<JwtResponseDto> googleLogin(@RequestBody GoogleLoginRequestDto request) {
-        JwtResponseDto jwtResponse = authService.loginWithGoogle(request);
+    public ResponseEntity<JwtResponseDto> googleLogin(@RequestBody GoogleLoginRequestDto googleLoginRequestDto) {
+        JwtResponseDto jwtResponse = authService.loginWithGoogle(googleLoginRequestDto.code());
         return ResponseEntity.ok(jwtResponse);
     }
 }

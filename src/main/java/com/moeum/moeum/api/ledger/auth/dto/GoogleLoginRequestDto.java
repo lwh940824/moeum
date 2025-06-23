@@ -1,8 +1,5 @@
 package com.moeum.moeum.api.ledger.auth.dto;
 
-import lombok.Builder;
-
-@Builder
 public record GoogleLoginRequestDto(
-        String accessToken
+        String code
 ) {}

@@ -1,16 +1,16 @@
 package com.moeum.moeum.api.ledger.auth.service;
 
-import com.moeum.moeum.api.ledger.auth.dto.GoogleLoginRequestDto;
 import com.moeum.moeum.api.ledger.auth.dto.JwtResponseDto;
 import com.moeum.moeum.api.ledger.user.repository.UserRepository;
 import com.moeum.moeum.domain.User;
 import com.moeum.moeum.global.security.JwtTokenProvider;
+import com.moeum.moeum.type.RoleType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -22,25 +22,56 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public JwtResponseDto loginWithGoogle(GoogleLoginRequestDto googleLoginRequestDto) {
-        String url = "https://www.googleapis.com/oauth2/v3/userinfo";
+    @Value("${google.oauth2.client-id}")
+    private String clientId;
+
+    @Value("${google.oauth2.client-secret}")
+    private String clientSecret;
+
+    @Value("${google.oauth2.redirect-uri}")
+    private String redirectUri;
+
+    public JwtResponseDto loginWithGoogle(String code) {
+        RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(googleLoginRequestDto.accessToken());
-        HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", code);
+        params.add("client_id", clientId);
+        params.add("client_secret", clientSecret);
+        params.add("redirect_uri", redirectUri);
+        params.add("grant_type", "authorization_code");
 
-        ResponseEntity<Map> response = new RestTemplate().exchange(url, HttpMethod.GET, httpEntity, Map.class);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException("Invalid Google Token");
-        }
+        ResponseEntity<Map> tokenResponse = restTemplate.postForEntity(
+                "https://oauth2.googleapis.com/token",
+                request,
+                Map.class
+        );
 
-        Map userInfo = response.getBody();
+        Map tokenBody = tokenResponse.getBody();
+        String accessToken = (String) tokenBody.get("access_token");
+
+        // Google userinfo API
+        HttpHeaders userHeaders = new HttpHeaders();
+        userHeaders.setBearerAuth(accessToken);
+        HttpEntity<Void> userRequest = new HttpEntity<>(userHeaders);
+
+        ResponseEntity<Map> userResponse = restTemplate.exchange(
+                "https://www.googleapis.com/oauth2/v3/userinfo",
+                HttpMethod.GET,
+                userRequest,
+                Map.class
+        );
+
+        Map userInfo = userResponse.getBody();
         String email = (String) userInfo.get("email");
         String name = (String) userInfo.get("name");
 
         User user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(User.builder().email(email).name(name).build()));
+                .orElseGet(() -> userRepository.save(User.builder().email(email).name(name).roleType(RoleType.USER).build()));
 
         String jwt = jwtTokenProvider.createToken(user);
         return new JwtResponseDto(jwt);
