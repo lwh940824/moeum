@@ -19,9 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryGroupService {
 
-    CategoryGroupMapper categoryGroupMapper;
-    CategoryGroupRepository categoryGroupRepository;
-    UserService userService;
+    private final CategoryGroupMapper categoryGroupMapper;
+    private final CategoryGroupRepository categoryGroupRepository;
+    private final UserService userService;
 
     public List<CategoryGroupResponseDto> findAllByUserId(Long userId) {
         return categoryGroupRepository.findAllByUserId(userId).stream()
