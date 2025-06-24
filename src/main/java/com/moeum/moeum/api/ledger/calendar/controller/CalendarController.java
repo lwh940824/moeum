@@ -4,6 +4,7 @@ import com.moeum.moeum.api.ledger.calendar.dto.CalendarSummaryRequestDto;
 import com.moeum.moeum.api.ledger.calendar.dto.CalendarSummaryResponseDto;
 import com.moeum.moeum.api.ledger.calendar.service.CalendarService;
 import com.moeum.moeum.global.security.CustomUserDetails;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Tag(name = "캘린더")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/calendar")

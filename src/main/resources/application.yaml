@@ -23,3 +23,9 @@ google:
 jwt:
   secret: p7hfZCh+0MYRtdv35xWcFhxQiMZ3vbdc5bc+lc0pdaM=
   expire: 3600000
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

@@ -5,6 +5,8 @@ import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupResponseDto;
 import com.moeum.moeum.api.ledger.categoryGroup.dto.CategoryGroupUpdateRequestDto;
 import com.moeum.moeum.api.ledger.categoryGroup.service.CategoryGroupService;
 import com.moeum.moeum.global.security.CustomUserDetails;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "카테고리 그룹")
 @RestController
 @RequestMapping("/api/category-group")
 @RequiredArgsConstructor

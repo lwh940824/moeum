@@ -3,6 +3,7 @@ package com.moeum.moeum.api.ledger.payment.controller;
 import com.moeum.moeum.api.ledger.payment.service.PaymentService;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentResponseDto;
 import com.moeum.moeum.global.security.CustomUserDetails;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Tag(name = "결제수단")
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor

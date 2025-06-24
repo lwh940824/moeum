@@ -5,6 +5,7 @@ import com.moeum.moeum.api.ledger.item.dto.ItemCreateRequestDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemResponseDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemUpdateRequestDto;
 import com.moeum.moeum.global.security.CustomUserDetails;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "아이템")
 @RestController
 @RequestMapping("/api/item")
 @RequiredArgsConstructor
