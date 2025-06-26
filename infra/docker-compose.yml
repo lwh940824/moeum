@@ -1,37 +1,16 @@
 version: "3.8"
 
 services:
-  springboot-app:
-    container_name: springboot-app
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpass
-      MINIO_ENDPOINT: http://minio:9000
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
-      MINIO_BUCKET: category-images
-    depends_on:
-      - db
-      - minio
-    networks:
-      - backend
-
   db:
     image: mysql:8.0
     container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: moeum
     ports:
       - "3306:3306"
     volumes:
-      - db-data:/var/lib/mysql
+      - /d/service/db:/var/lib/mysql
     networks:
       - backend
 
@@ -42,17 +21,13 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
-      - minio-data:/data
+      - /d/service/minio:/data
     command: server --console-address ":9001" /data
     networks:
       - backend
-
-volumes:
-  db-data:
-  minio-data:
 
 networks:
   backend:
