@@ -24,6 +24,12 @@ jwt:
   secret: p7hfZCh+0MYRtdv35xWcFhxQiMZ3vbdc5bc+lc0pdaM=
   expire: 3600000
 
+minio:
+  url: http://localhost:9000
+  access-key: moeum
+  secret-key: moeum7192
+  bucket: moeum
+
 logging:
   level:
     org:
