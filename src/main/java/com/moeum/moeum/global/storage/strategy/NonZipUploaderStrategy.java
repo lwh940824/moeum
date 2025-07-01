@@ -1,6 +1,6 @@
 package com.moeum.moeum.global.storage.strategy;
 
-import com.moeum.moeum.global.storage.UploadFileDto;
+import com.moeum.moeum.global.storage.dto.UploadFileDto;
 import com.moeum.moeum.global.storage.service.StorageUploader;
 import com.moeum.moeum.type.FileType;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class GeneralUploaderStrategy implements FileUploadStrategy {
+public class NonZipUploaderStrategy implements FileUploadStrategy {
 
     private final StorageUploader storageUploader;
 
@@ -22,6 +22,6 @@ public class GeneralUploaderStrategy implements FileUploadStrategy {
 
     @Override
     public List<UploadFileDto> upload(MultipartFile file, String path, FileType fileType) {
-        return storageUploader.upload(file, path, fileType);
+        return List.of(storageUploader.upload(file, path, fileType));
     }
 }

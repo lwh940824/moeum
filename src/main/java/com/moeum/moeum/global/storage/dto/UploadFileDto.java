@@ -1,4 +1,4 @@
-package com.moeum.moeum.global.storage;
+package com.moeum.moeum.global.storage.dto;
 
 import com.moeum.moeum.type.FileType;
 
