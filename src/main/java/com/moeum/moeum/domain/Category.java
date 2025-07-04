@@ -1,7 +1,6 @@
 package com.moeum.moeum.domain;
 
-import com.moeum.moeum.global.exception.CustomException;
-import com.moeum.moeum.global.exception.ErrorCode;
+import com.moeum.moeum.type.CategoryType;
 import com.moeum.moeum.type.RecurringType;
 import com.moeum.moeum.type.YnType;
 import jakarta.persistence.*;
@@ -15,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-@Table(name = "ledger_category")
+@Table(name = "ledger_category_group")
 public class Category extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +24,11 @@ public class Category extends BaseEntity {
     @Column(nullable = false, length = 10)
     private String name;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryType;
+
+    @Column(nullable = false)
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
@@ -38,43 +42,40 @@ public class Category extends BaseEntity {
 
     private LocalDateTime recurringEndDt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_group_id", nullable = false)
-    private CategoryGroup categoryGroup;
-
     @OneToMany(mappedBy = "category")
     private List<Item> itemList = new ArrayList<>();
 
-    @Builder
-    public void update(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt) {
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Category parent;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public void update(String name, CategoryType categoryType, String imageUrl) {
         this.name = name;
+        this.categoryType = categoryType;
+        this.imageUrl = imageUrl;
+    }
+
+    public void changeParent(Category parent) {
+        this.parent = parent;
+    }
+
+    public void assignUser(User user) {
+        this.user = user;
+    }
+
+    @Builder
+    public Category(String name, CategoryType categoryType, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, List<Category> categoryList, User user) {
+        this.name = name;
+        this.categoryType = categoryType;
         this.imageUrl = imageUrl;
         this.investmentYn = investmentYn;
         this.recurringType = recurringType;
         this.recurringStartDt = recurringStartDt;
         this.recurringEndDt = recurringEndDt;
-    }
-
-    public void changeCategoryGroup(CategoryGroup categoryGroup) {
-        if (categoryGroup == null) throw new CustomException(ErrorCode.REQUIRED_CATEGORY_GROUP);
-        if (this.categoryGroup != null) this.categoryGroup.getCategoryList().remove(this);
-
-        if (!categoryGroup.getCategoryList().contains(this)) {
-            categoryGroup.getCategoryList().add(this);
-        }
-
-        this.categoryGroup = categoryGroup;
-    }
-
-    @Builder
-    public Category(String name, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, CategoryGroup categoryGroup) {
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.investmentYn = investmentYn;
-        this.recurringType = recurringType;
-        this.recurringStartDt = recurringStartDt;
-        this.recurringEndDt = recurringEndDt;
-        this.categoryGroup = categoryGroup;
+        this.user = user;
     }
 }
-

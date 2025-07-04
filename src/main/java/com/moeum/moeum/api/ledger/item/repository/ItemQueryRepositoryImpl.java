@@ -2,7 +2,6 @@ package com.moeum.moeum.api.ledger.item.repository;
 
 import com.moeum.moeum.domain.Item;
 import com.moeum.moeum.domain.QCategory;
-import com.moeum.moeum.domain.QCategoryGroup;
 import com.moeum.moeum.domain.QItem;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +21,12 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
     public List<Item> findAllByUserId(Long userId) {
         QItem item = QItem.item;
         QCategory category = QCategory.category;
-        QCategoryGroup categoryGroup = QCategoryGroup.categoryGroup;
 
         return queryFactory
                 .selectFrom(item)
                 .join(item.category, category).fetchJoin()
-                .join(category.categoryGroup, categoryGroup).fetchJoin()
                 .where(
-                        categoryGroup.user.id.eq(userId)
+                        category.user.id.eq(userId)
                 ).fetch();
     }
 
@@ -37,14 +34,12 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
     public Optional<Item> findByUserIdAndId(Long userId, Long itemId) {
         QItem item = QItem.item;
         QCategory category = QCategory.category;
-        QCategoryGroup categoryGroup = QCategoryGroup.categoryGroup;
 
         return Optional.ofNullable(queryFactory
                 .selectFrom(item)
                 .join(item.category, category).fetchJoin()
-                .join(category.categoryGroup, categoryGroup).fetchJoin()
                 .where(
-                        categoryGroup.user.id.eq(userId)
+                        category.user.id.eq(userId)
                                 .and(item.id.eq(itemId))
                 ).fetchOne()
         );
