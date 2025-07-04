@@ -1,6 +1,5 @@
 package com.moeum.moeum.global.storage.strategy;
 
-import com.moeum.moeum.global.storage.ZipExtractor;
 import com.moeum.moeum.global.storage.dto.UploadFileDto;
 import com.moeum.moeum.global.storage.service.StorageUploader;
 import com.moeum.moeum.type.FileType;

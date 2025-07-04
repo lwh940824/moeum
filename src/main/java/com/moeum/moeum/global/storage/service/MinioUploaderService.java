@@ -13,10 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -48,6 +44,7 @@ public class MinioUploaderService implements StorageUploader {
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .build()
             );
+
             return new UploadFileDto(
                     file.getOriginalFilename(),
                     uploadPath,
