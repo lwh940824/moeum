@@ -29,10 +29,10 @@ CREATE TABLE `ledger_payment` (
 
 CREATE TABLE `ledger_category` (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '카테고리 아이디',
-    `parent_id` BIGINT COMMENT '카테고리 부모 아이디',
+    `group_id` BIGINT COMMENT '카테고리 부모 아이디',
     `user_id` BIGINT NOT NULL COMMENT '사용자 아이디',
     `name` VARCHAR(50) NOT NULL COMMENT '카테고리 이름',
-    `category_type` VARCHAR(10) NOT NULL COMMENT '수입, 지출 타입',
+    `category_type` VARCHAR(15) NOT NULL COMMENT '수입, 지출 타입',
     `image_url` VARCHAR(255) NULL COMMENT '카테고리 아이콘 이미지',
     `investment_yn` VARCHAR(1) NOT NULL COMMENT '자산계획 사용 여부',
     `recurring_type` VARCHAR(20) NULL COMMENT '반복 등록 여부(일, 주, 월)',
@@ -51,7 +51,7 @@ CREATE TABLE `ledger_category` (
 #     `category_group_id` BIGINT NOT NULL COMMENT '카테고리 그룹 아이디',
 #     `name` VARCHAR(50) NULL COMMENT '카테고리 소분류 이름',
 #     `investment_yn` VARCHAR(1) NOT NULL DEFAULT 'N' COMMENT '자산계획 사용여부',
-#     `recurring_type` VARCHAR(10) NULL COMMENT '반복 등록 여부(일, 주, 월)',
+#     `recurring_type` VARCHAR(15) NULL COMMENT '반복 등록 여부(일, 주, 월)',
 #     `recurring_start_dt` DATETIME NULL COMMENT '반복시작일',
 #     `recurring_end_dt` DATETIME NULL COMMENT '반복종료일',
 #     `image_url` VARCHAR(255) NULL COMMENT '카테고리 아이콘 이미지',
@@ -109,3 +109,9 @@ CREATE INDEX idx_ledger_item_category_occurred_at ON ledger_item(category_id, oc
 
 -- ledger_asset_plan
 CREATE INDEX idx_ledger_asset_plan_category_id ON ledger_asset_plan(category_id);
+
+-- 25.08.09
+alter table ledger_category
+add constraint FKnfft1mmlqqpn8iahvjtsyjkm4
+foreign key (group_id)
+references ledger_category (id)
