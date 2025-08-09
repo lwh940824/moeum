@@ -71,7 +71,7 @@ public class AuthService {
         String name = (String) userInfo.get("name");
 
         User user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(User.builder().email(email).name(name).roleType(RoleType.USER).build()));
+                .orElseGet(() -> userRepository.save(User.builder().email(email).name(name).roleType(RoleType.ROLE_USER).build()));
 
         String jwt = jwtTokenProvider.createToken(user);
         return new JwtResponseDto(jwt);
