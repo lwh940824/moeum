@@ -9,9 +9,9 @@ import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,17 +23,23 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final UserService userService;
 
-    public List<CategoryResponseDto> findAllByUserId(Long userId) {
-        return categoryRepository.findAllByUserId(userId).stream()
+    @Transactional(readOnly = true)
+    public List<CategoryResponseDto> getCategoryList(Long userId) {
+        return categoryRepository.findAllByUserIdAndGroupIdIsNotNull(userId).stream()
                 .map(categoryMapper::toDto)
                 .toList();
     }
 
-    public CategoryResponseDto findById(Long categoryId) {
-        return categoryMapper.toDto(
-                categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY))
-        );
+    @Transactional(readOnly = true)
+    public CategoryResponseDto findById(Long userId, Long categoryId) {
+        return categoryMapper.toDto(getEntity(userId, categoryId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryResponseDto> getCategoryGroupList(Long userId) {
+        return categoryRepository.findAllByUserIdAndGroupIdIsNull(userId).stream()
+                .map(categoryMapper::toDto)
+                .toList();
     }
 
     @Transactional
@@ -44,9 +50,9 @@ public class CategoryService {
         Category category = categoryMapper.toEntity(categoryCreateRequestDto);
         category.assignUser(userService.getEntity(userId));
 
-        if (categoryCreateRequestDto.parentId() != null) {
-            Category parentCategory = getEntity(userId, categoryCreateRequestDto.parentId());
-            category.changeParent(parentCategory);
+        if (categoryCreateRequestDto.groupId() != null) {
+            Category categoryGroup = getEntity(userId, categoryCreateRequestDto.groupId());
+            category.changeGroupId(categoryGroup);
         }
 
         return categoryMapper.toDto(categoryRepository.save(category));
@@ -62,9 +68,15 @@ public class CategoryService {
                 categoryUpdateRequestDto.imageUrl()
         );
 
-        if (categoryUpdateRequestDto.parentId() != null) {
-            Category parentCategory = getEntity(userId, categoryUpdateRequestDto.parentId());
-            category.changeParent(parentCategory);
+        if (categoryUpdateRequestDto.groupId() == null) {
+            category.changeGroupId(null);
+        } else {
+            Category categoryGroup = getEntity(userId, categoryUpdateRequestDto.groupId());
+
+            // 자기 자신 설정 금지
+            if (categoryGroup.getId().equals(categoryUpdateRequestDto.groupId())) throw new CustomException(ErrorCode.CATEGORY_ERROR);
+
+            category.changeGroupId(categoryGroup);
         }
 
         return categoryMapper.toDto(category);

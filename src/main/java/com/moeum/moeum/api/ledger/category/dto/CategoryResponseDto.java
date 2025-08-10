@@ -4,7 +4,7 @@ import com.moeum.moeum.type.CategoryType;
 
 public record CategoryResponseDto(
         Long id,
-        Long parentId,
+        Long groupId,
         String name,
         CategoryType categoryType,
         String imageUrl

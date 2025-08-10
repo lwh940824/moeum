@@ -18,12 +18,12 @@ public enum ErrorCode {
     EXISTS_CATEGORY(HttpStatus.CONFLICT, "이미 존재하는 카테고리입니다."),
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다."),
     REQUIRED_CATEGORY(HttpStatus.BAD_REQUEST, "카테고리는 필수입니다."),
+    CATEGORY_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카테고리 관련 작업중 오류 발생"),
 
     NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "존재하지 않는 아이템입니다."),
 
     EXISTS_PAYMENT(HttpStatus.CONFLICT, "이미 존재하는 결제수단입니다."),
     NOT_FOUND_PAYMENT(HttpStatus.NOT_FOUND, "존재하지 않는 결제수단입니다."),
-
 
     // MinIO 관련 에러
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드중 문제가 발생했습니다."),

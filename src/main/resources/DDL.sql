@@ -43,7 +43,7 @@ CREATE TABLE `ledger_category` (
     `mod_dt` DATETIME NOT NULL,
     `mod_user` VARCHAR(50) NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `FK_user_TO_ledger_category_group` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+    CONSTRAINT `FK_user_TO_ledger_category` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
 
 # CREATE TABLE `ledger_category` (

@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-@Table(name = "ledger_category_group")
+@Table(name = "ledger_category")
 public class Category extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,8 +46,8 @@ public class Category extends BaseEntity {
     private List<Item> itemList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Category parent;
+    @JoinColumn(name = "group_id")
+    private Category groupId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -59,8 +59,8 @@ public class Category extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void changeParent(Category parent) {
-        this.parent = parent;
+    public void changeGroupId(Category groupId) {
+        this.groupId = groupId;
     }
 
     public void assignUser(User user) {

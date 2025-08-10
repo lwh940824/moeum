@@ -24,13 +24,18 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponseDto>> getAllCategory(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseEntity.ok(categoryService.findAllByUserId(userDetails.getId()));
+    public ResponseEntity<List<CategoryResponseDto>> getCategoryList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(categoryService.getCategoryList(userDetails.getId()));
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable Long categoryId) {
-        return ResponseEntity.ok(categoryService.findById(categoryId));
+    public ResponseEntity<CategoryResponseDto> getCategory(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long categoryId) {
+        return ResponseEntity.ok(categoryService.findById(userDetails.getId(), categoryId));
+    }
+
+    @GetMapping("/groups")
+    public ResponseEntity<List<CategoryResponseDto>> getCategoryGroupList(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(categoryService.getCategoryGroupList(userDetails.getId()));
     }
 
     @PostMapping
