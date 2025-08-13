@@ -1,5 +1,7 @@
 package com.moeum.moeum.domain;
 
+import com.moeum.moeum.global.exception.CustomException;
+import com.moeum.moeum.global.exception.ErrorCode;
 import com.moeum.moeum.type.CategoryType;
 import com.moeum.moeum.type.RecurringType;
 import com.moeum.moeum.type.YnType;
@@ -42,6 +44,8 @@ public class Category extends BaseEntity {
 
     private LocalDateTime recurringEndDt;
 
+    private YnType useYn;
+
     @OneToMany(mappedBy = "category")
     private List<Item> itemList = new ArrayList<>();
 
@@ -65,6 +69,10 @@ public class Category extends BaseEntity {
 
     public void assignUser(User user) {
         this.user = user;
+    }
+
+    public void deactivate(YnType useYn) {
+        this.useYn = useYn;
     }
 
     @Builder

@@ -1,5 +1,6 @@
 package com.moeum.moeum.api.ledger.category.service;
 
+import com.moeum.moeum.api.ledger.category.dto.CategoryChangeYnRequest;
 import com.moeum.moeum.api.ledger.category.mapper.CategoryMapper;
 import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
@@ -9,6 +10,7 @@ import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
+import com.moeum.moeum.type.YnType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,9 +85,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public void delete(Long userId, Long categoryId) {
+    public void deactivate(Long userId, Long categoryId, CategoryChangeYnRequest categoryChangeYnRequest) {
         Category category = getEntity(userId, categoryId);
-        categoryRepository.delete(category);
+        category.deactivate(categoryChangeYnRequest.useYn());
     }
 
     public Category getEntity(Long userId, Long categoryId) {

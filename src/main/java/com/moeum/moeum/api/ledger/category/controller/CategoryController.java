@@ -1,5 +1,6 @@
 package com.moeum.moeum.api.ledger.category.controller;
 
+import com.moeum.moeum.api.ledger.category.dto.CategoryChangeYnRequest;
 import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryUpdateRequestDto;
@@ -57,9 +58,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.update(userDetails.getId(), categoryId, categoryUpdateRequestDto));
     }
 
-    @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long categoryId) {
-        categoryService.delete(userDetails.getId(), categoryId);
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<Void> deactivateCategory(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long categoryId, @RequestBody CategoryChangeYnRequest categoryChangeYnRequest) {
+        categoryService.deactivate(userDetails.getId(), categoryId, categoryChangeYnRequest);
         return ResponseEntity.noContent().build();
     }
 }
