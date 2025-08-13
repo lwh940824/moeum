@@ -1,117 +1,111 @@
+-- USER
 CREATE TABLE `user` (
-    `user_id` BIGINT NOT NULL AUTO_INCREMENT,
-    `activate_id` VARCHAR(50) NULL,
-    `password` VARCHAR(255) NULL,
-    `role_type` VARCHAR(10) NOT NULL,
-    `address` VARCHAR(255) NULL,
-    `email` VARCHAR(255) NULL,
-    `provider` VARCHAR(10) NULL,
-    `provider_id` VARCHAR(255) NULL,
-    `reg_dt` DATETIME NOT NULL ,
-    `reg_user` VARCHAR(50) NOT NULL,
-    `mod_dt` DATETIME NOT NULL ,
-    `mod_user` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`user_id`)
-);
+                        `user_id`      BIGINT NOT NULL AUTO_INCREMENT,
+                        `activate_id`  VARCHAR(50)  NULL,
+                        `password`     VARCHAR(255) NULL,
+                        `role_type`    VARCHAR(10)  NOT NULL,
+                        `address`      VARCHAR(255) NULL,
+                        `email`        VARCHAR(255) NULL,
+                        `provider`     VARCHAR(10)  NULL,
+                        `provider_id`  VARCHAR(255) NULL,
 
+                        `reg_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        `reg_user`     VARCHAR(50) NOT NULL,
+                        `mod_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        `mod_user`     VARCHAR(50) NOT NULL,
+
+                        CONSTRAINT `PK_USER` PRIMARY KEY (`user_id`),
+                        CONSTRAINT `CHK_USER_PROVIDER` CHECK (`provider` IN ('GOOGLE','KAKAO') OR `provider` IS NULL)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 결제수단
 CREATE TABLE `ledger_payment` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '결제수단 아이디',
-    `user_id` BIGINT NOT NULL COMMENT '사용자 아이디',
-    `name` VARCHAR(100) NULL COMMENT '결제수단 이름',
-    `payment_type` VARCHAR(10) NULL COMMENT '결제수단 타입',
-    `reg_dt` DATETIME NOT NULL ,
-    `reg_user` VARCHAR(50) NOT NULL,
-    `mod_dt` DATETIME NOT NULL ,
-    `mod_user` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `FK_user_TO_ledger_payment` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-);
+                                  `payment_id`   BIGINT NOT NULL AUTO_INCREMENT COMMENT '결제수단 아이디',
+                                  `user_id`      BIGINT NOT NULL COMMENT '사용자 아이디',
+                                  `name`         VARCHAR(100) NULL COMMENT '결제수단 이름',
+                                  `payment_type` VARCHAR(10)  NULL COMMENT '결제수단 타입',
 
+                                  `reg_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                  `reg_user`     VARCHAR(50) NOT NULL,
+                                  `mod_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                  `mod_user`     VARCHAR(50) NOT NULL,
+
+                                  CONSTRAINT `PK_LEDGER_PAYMENT` PRIMARY KEY (`payment_id`, `user_id`),
+                                  CONSTRAINT `CHK_PAYMENT_TYPE` CHECK (`payment_type` IN ('CASH','ATM','CREDIT','ETC') OR `payment_type` IS NULL)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 카테고리
 CREATE TABLE `ledger_category` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '카테고리 아이디',
-    `group_id` BIGINT COMMENT '카테고리 부모 아이디',
-    `user_id` BIGINT NOT NULL COMMENT '사용자 아이디',
-    `name` VARCHAR(50) NOT NULL COMMENT '카테고리 이름',
-    `category_type` VARCHAR(15) NOT NULL COMMENT '수입, 지출 타입',
-    `image_url` VARCHAR(255) NULL COMMENT '카테고리 아이콘 이미지',
-    `investment_yn` VARCHAR(1) NOT NULL COMMENT '자산계획 사용 여부',
-    `recurring_type` VARCHAR(20) NULL COMMENT '반복 등록 여부(일, 주, 월)',
-    `recurring_start_dt` DATETIME NULL COMMENT '반복시작일',
-    `recurring_end_dt` DATETIME NULL COMMENT '반복종료일',
-    `reg_dt` DATETIME NOT NULL,
-    `reg_user` VARCHAR(50) NOT NULL,
-    `mod_dt` DATETIME NOT NULL,
-    `mod_user` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `FK_user_TO_ledger_category` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-);
+                                   `category_id`  BIGINT NOT NULL AUTO_INCREMENT COMMENT '카테고리 아이디',
+                                   `group_id`    BIGINT NULL  COMMENT '카테고리 그룹 아이디',
+                                   `user_id`      BIGINT NOT NULL,
+                                   `name`         VARCHAR(50)  NULL COMMENT '카테고리 소분류 이름',
+                                   `investment_yn` VARCHAR(1)   NOT NULL DEFAULT 'N' COMMENT '자산계획 사용여부 (Y/N)',
+                                   `image_url`    VARCHAR(255) NULL COMMENT '카테고리 아이콘 이미지',
+                                   `use_yn`        VARCHAR(1)   NOT NULL DEFAULT 'Y' COMMENT '카테고리 사용여부 (Y/N)',
 
-# CREATE TABLE `ledger_category` (
-#     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '카테고리 아이디',
-#     `category_group_id` BIGINT NOT NULL COMMENT '카테고리 그룹 아이디',
-#     `name` VARCHAR(50) NULL COMMENT '카테고리 소분류 이름',
-#     `investment_yn` VARCHAR(1) NOT NULL DEFAULT 'N' COMMENT '자산계획 사용여부',
-#     `recurring_type` VARCHAR(15) NULL COMMENT '반복 등록 여부(일, 주, 월)',
-#     `recurring_start_dt` DATETIME NULL COMMENT '반복시작일',
-#     `recurring_end_dt` DATETIME NULL COMMENT '반복종료일',
-#     `image_url` VARCHAR(255) NULL COMMENT '카테고리 아이콘 이미지',
-#     `reg_dt` DATETIME NOT NULL ,
-#     `reg_user` VARCHAR(50) NOT NULL,
-#     `mod_dt` DATETIME NOT NULL ,
-#     `mod_user` VARCHAR(50) NOT NULL,
-#     PRIMARY KEY (`id`),
-#     CONSTRAINT `FK_category_group_TO_category` FOREIGN KEY (`category_group_id`) REFERENCES `ledger_category_group` (`id`)
-# );
+                                   `reg_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                   `reg_user`     VARCHAR(50) NOT NULL,
+                                   `mod_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                   `mod_user`     VARCHAR(50) NOT NULL,
 
+                                   CONSTRAINT `PK_LEDGER_CATEGORY` PRIMARY KEY (`category_id`),
+                                   CONSTRAINT `CHK_CATEGORY_INVEST_YN` CHECK (`investmentYn` IN ('Y','N')),
+                                   CONSTRAINT `CHK_CATEGORY_USE_YN` CHECK (`useYn` IN ('Y','N'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 반복 계획
+CREATE TABLE `ledger_item_plan` (
+                                    `item_plan_id`       BIGINT NOT NULL AUTO_INCREMENT COMMENT '아이템 반복 아이디',
+                                    `user_id`            BIGINT       NOT NULL COMMENT '유저 아이디',
+                                    `category_id`        BIGINT       NOT NULL COMMENT '카테고리 아이디',
+                                    `payment_id`         BIGINT       NOT NULL COMMENT '결제수단 아이디',
+                                    `recurring_type`     VARCHAR(10)  NOT NULL COMMENT '반복 타입',
+                                    `recurring_start_dt` DATE         NOT NULL COMMENT '반복시작일',
+                                    `recurring_end_dt`   DATE         NOT NULL COMMENT '반복종료일',
+                                    `amount`             DECIMAL(10,2) NOT NULL COMMENT '금액',
+                                    `occurred_at`        DATE         NOT NULL COMMENT '날짜',
+                                    `memo`               VARCHAR(100) NULL COMMENT '입출금 내용',
+
+                                    `reg_dt`             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                    `reg_user`           VARCHAR(50) NOT NULL,
+                                    `mod_dt`             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                    `mod_user`           VARCHAR(50) NOT NULL,
+
+                                    CONSTRAINT `PK_LEDGER_ITEM_PLAN` PRIMARY KEY (`item_plan_id`),
+                                    CONSTRAINT `CHK_RECURRING_TYPE` CHECK (`recurring_type` IN ('DAY','WEEK','MONTH'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 실제 아이템
 CREATE TABLE `ledger_item` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '아이템 아이디',
-    `category_id` BIGINT NOT NULL COMMENT '카테고리 아이디',
-    `payment_id` BIGINT NOT NULL COMMENT '결제수단 아이디',
-    `amount` DECIMAL(10,2) NULL COMMENT '금액',
-    `occurred_at` DATE NULL COMMENT '날짜',
-    `memo` VARCHAR(100) NULL COMMENT '입출금 내용',
-    `reg_dt` DATETIME NOT NULL ,
-    `reg_user` VARCHAR(50) NOT NULL,
-    `mod_dt` DATETIME NOT NULL ,
-    `mod_user` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `FK_category_TO_item` FOREIGN KEY (`category_id`) REFERENCES `ledger_category` (`id`),
-    CONSTRAINT `FK_payment_TO_item` FOREIGN KEY (`payment_id`) REFERENCES `ledger_payment` (`id`)
-);
+                               `item_id`      BIGINT NOT NULL AUTO_INCREMENT COMMENT '아이템 아이디',
+                               `category_id`  BIGINT NOT NULL COMMENT '카테고리 아이디',
+                               `payment_id`   BIGINT NOT NULL COMMENT '결제수단 아이디',
+                               `item_plan_id` BIGINT NOT NULL COMMENT '아이템 반복 아이디',
+                               `amount`       DECIMAL(10,2) NULL COMMENT '금액',
+                               `occurred_at`  DATE          NULL COMMENT '날짜',
+                               `memo`         VARCHAR(100)  NULL COMMENT '입출금 내용',
 
+                               `reg_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                               `reg_user`     VARCHAR(50) NOT NULL,
+                               `mod_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                               `mod_user`     VARCHAR(50) NOT NULL,
+
+                               CONSTRAINT `PK_LEDGER_ITEM` PRIMARY KEY (`item_id`, `category_id`, `payment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 자산 계획
 CREATE TABLE `ledger_asset_plan` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '자산계획 아이디',
-    `category_id` BIGINT NOT NULL COMMENT '카테고리 아이디',
-    `interest_rate` DECIMAL(5,2) NULL COMMENT '예상 수익률(%)',
-    `interest_type` VARCHAR(10) NULL COMMENT '이자 계산 방식(단리, 복리)',
-    `reg_dt` DATETIME NOT NULL ,
-    `reg_user` VARCHAR(50) NOT NULL,
-    `mod_dt` DATETIME NOT NULL ,
-    `mod_user` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `FK_category_TO_asset_plan` FOREIGN KEY (`category_id`) REFERENCES `ledger_category` (`id`)
-);
+                                     `asset_plan_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '자산계획 아이디',
+                                     `category_id`   BIGINT NOT NULL COMMENT '카테고리 아이디',
+                                     `interest_rate` DECIMAL(5,2) NULL COMMENT '예상 수익률(%)',
+                                     `interest_type` VARCHAR(10)  NULL COMMENT '이자 계산 방식(단리/복리)',
 
--- ledger_payment
-CREATE INDEX idx_ledger_payment_user_id ON ledger_payment(user_id);
+                                     `reg_dt`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                     `reg_user`      VARCHAR(50) NOT NULL,
+                                     `mod_dt`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                     `mod_user`      VARCHAR(50) NOT NULL,
 
--- ledger_category_group
-CREATE INDEX idx_ledger_category_group_user_id ON ledger_category_group(user_id);
-
--- ledger_category
-CREATE INDEX idx_ledger_category_group_id ON ledger_category(category_group_id);
-
--- ledger_item
-CREATE INDEX idx_ledger_item_category_id ON ledger_item(category_id);
-CREATE INDEX idx_ledger_item_payment_id ON ledger_item(payment_id);
-CREATE INDEX idx_ledger_item_occurred_at ON ledger_item(occurred_at);
-CREATE INDEX idx_ledger_item_category_occurred_at ON ledger_item(category_id, occurred_at);
-
--- ledger_asset_plan
-CREATE INDEX idx_ledger_asset_plan_category_id ON ledger_asset_plan(category_id);
-
--- 25.08.09
-alter table ledger_category
-add constraint FKnfft1mmlqqpn8iahvjtsyjkm4
-foreign key (group_id)
-references ledger_category (id)
+                                     CONSTRAINT `PK_LEDGER_ASSET_PLAN` PRIMARY KEY (`asset_plan_id`, `category_id`),
+                                     CONSTRAINT `CHK_INTEREST_TYPE` CHECK (`interest_type` IN ('SIMPLE','COMPOUND') OR `interest_type` IS NULL)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
