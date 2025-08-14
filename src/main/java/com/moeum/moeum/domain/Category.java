@@ -1,7 +1,5 @@
 package com.moeum.moeum.domain;
 
-import com.moeum.moeum.global.exception.CustomException;
-import com.moeum.moeum.global.exception.ErrorCode;
 import com.moeum.moeum.type.CategoryType;
 import com.moeum.moeum.type.RecurringType;
 import com.moeum.moeum.type.YnType;

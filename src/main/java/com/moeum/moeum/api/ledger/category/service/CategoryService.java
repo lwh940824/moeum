@@ -1,16 +1,15 @@
 package com.moeum.moeum.api.ledger.category.service;
 
 import com.moeum.moeum.api.ledger.category.dto.CategoryChangeYnRequest;
-import com.moeum.moeum.api.ledger.category.mapper.CategoryMapper;
 import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryUpdateRequestDto;
+import com.moeum.moeum.api.ledger.category.mapper.CategoryMapper;
 import com.moeum.moeum.api.ledger.category.repository.CategoryRepository;
 import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
-import com.moeum.moeum.type.YnType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
