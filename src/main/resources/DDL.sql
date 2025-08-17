@@ -110,18 +110,19 @@ CREATE TABLE `ledger_asset_plan` (
                                      CONSTRAINT `CHK_INTEREST_TYPE` CHECK (`interest_type` IN ('SIMPLE','COMPOUND') OR `interest_type` IS NULL)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 투자 설정
+-- 투자 집계 설정
 CREATE TABLE `ledger_invest_setting` (
                                               `id`     BIGINT NOT NULL AUTO_INCREMENT,
                                               `category_id` BIGINT NOT NULL,
-                                              `hidden_yn`   VARCHAR(1) NOT NULL DEFAULT 'N',
-                                              `use_yn`  VARCHAR(1) NOT NULL DEFAULT 'N',
+                                              `show_yn`   VARCHAR(1) NOT NULL DEFAULT 'Y',
+                                              `use_yn`  VARCHAR(1) NOT NULL DEFAULT 'Y',
                                               `reg_dt`      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                               `reg_user`    VARCHAR(50) NOT NULL,
                                               `mod_dt`      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                               `mod_user`    VARCHAR(50) NOT NULL,
                                               CONSTRAINT `PK_LEDGER_INVEST_SETTING` PRIMARY KEY (`id`),
-                                              CHECK (`hidden_yn` IN ('Y','N')),
+                                              UNIQUE KEY `UQ_LEDGER_INVEST_SETTING` (`category_id`),
+                                              CHECK (`show_yn` IN ('Y','N')),
                                               CHECK (`use_yn` IN ('Y','N'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -137,6 +138,6 @@ CREATE TABLE `ledger_invest_summary` (
                                               `mod_dt`      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                               `mod_user`    VARCHAR(50) NOT NULL,
                                               CONSTRAINT `PK_LEDGER_INVEST_SUMMARY` PRIMARY KEY (`id`),
-                                              UNIQUE KEY `UQ_PREF_CAT_YEAR_MONTH` (`invest_setting_id`,`year`,`month`),
+                                              UNIQUE KEY `UQ_LEDGER_INVEST_SUMMARY` (`invest_setting_id`,`year`,`month`),
                                               CHECK (`month` BETWEEN 1 AND 12)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
