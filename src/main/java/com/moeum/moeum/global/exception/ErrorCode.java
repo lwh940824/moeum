@@ -25,6 +25,8 @@ public enum ErrorCode {
     EXISTS_PAYMENT(HttpStatus.CONFLICT, "이미 존재하는 결제수단입니다."),
     NOT_FOUND_PAYMENT(HttpStatus.NOT_FOUND, "존재하지 않는 결제수단입니다."),
 
+    NOT_FOUND_INVEST_SETTING(HttpStatus.NOT_FOUND, "존재하지 않는 집계 설정입니다.."),
+
     // MinIO 관련 에러
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드중 문제가 발생했습니다."),
     NOT_FOUND_BUCKET(HttpStatus.NOT_FOUND, "존재하지 않는 버킷입니다."),
