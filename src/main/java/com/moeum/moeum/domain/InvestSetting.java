@@ -27,6 +27,11 @@ public class InvestSetting {
     @JoinColumn(name = "category_id", nullable = false, unique = true)
     private Category category;
 
+    @Builder
+    public InvestSetting(Category category) {
+        this.category = category;
+    }
+
     public void changeShowYn(YnType showYn) {
         if (this.showYn == showYn) return;
         this.showYn = showYn;
@@ -35,10 +40,5 @@ public class InvestSetting {
     public void changeUseYn(YnType useYn) {
         if (this.useYn == useYn) return;
         this.useYn = useYn;
-    }
-
-    @Builder
-    public InvestSetting(Category category) {
-        this.category = category;
     }
 }
