@@ -4,4 +4,5 @@ import com.moeum.moeum.domain.InvestSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InvestSummaryRepository extends JpaRepository<InvestSummary, Long> {
+    void deleteByInvestSettingId(Long investSettingId);
 }

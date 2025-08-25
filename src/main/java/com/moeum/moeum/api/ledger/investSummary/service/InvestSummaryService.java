@@ -19,7 +19,7 @@ public class InvestSummaryService {
 
     public void createAll(InvestSetting investSetting, List<ItemToSummaryDto> summaryList) {
         // 기존 등록된 InvestSummary 삭제
-
+        investSummaryRepository.deleteByInvestSettingId(investSetting.getId());
 
         List<InvestSummary> investSummaryEntityList = summaryList.stream().map(summary -> {
             InvestSummary investSummary = investSummaryMapper.toEntity(new InvestSummaryCreateDto(
