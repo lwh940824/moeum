@@ -1,7 +1,7 @@
 package com.moeum.moeum.api.ledger.investSetting.controller;
 
 import com.moeum.moeum.api.ledger.investSetting.service.InvestSettingService;
-import com.moeum.moeum.api.ledger.investSummary.dto.InvestSettingResponseDto;
+import com.moeum.moeum.api.ledger.investSetting.dto.InvestSettingResponseDto;
 import com.moeum.moeum.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class InvestSettingController {
 
     @GetMapping
     public ResponseEntity<List<InvestSettingResponseDto>> getInvestSettingList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseEntity.ok(investSettingService.getInvestSummaryList(userDetails.getId()));
+        return ResponseEntity.ok(investSettingService.getInvestSettingList(userDetails.getId()));
     }
 
     @GetMapping("/{investSettingId}")

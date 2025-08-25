@@ -1,6 +1,7 @@
 package com.moeum.moeum.api.ledger.investSetting.mapper;
 
-import com.moeum.moeum.api.ledger.investSummary.dto.InvestSettingResponseDto;
+import com.moeum.moeum.api.ledger.investSetting.dto.InvestSettingCreateDto;
+import com.moeum.moeum.api.ledger.investSetting.dto.InvestSettingResponseDto;
 import com.moeum.moeum.domain.InvestSetting;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -10,5 +11,5 @@ public interface InvestSettingMapper {
 
     InvestSettingResponseDto toDto(InvestSetting investSetting);
 
-    InvestSetting toEntity();
+    InvestSetting toEntity(InvestSettingCreateDto investSettingCreateDto);
 }

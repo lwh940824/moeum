@@ -34,6 +34,11 @@ public class InvestSummary {
         this.principal = principal;
     }
 
+    public void changeInvestSetting(InvestSetting investSetting) {
+        if (investSetting == null) return;
+        this.investSetting = investSetting;
+    }
+
     public void addPrincipal(Long principal) {
         this.principal += principal;
     }

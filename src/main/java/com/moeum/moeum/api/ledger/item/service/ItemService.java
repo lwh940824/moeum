@@ -3,6 +3,7 @@ package com.moeum.moeum.api.ledger.item.service;
 import com.moeum.moeum.api.ledger.category.service.CategoryService;
 import com.moeum.moeum.api.ledger.item.dto.ItemCreateRequestDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemResponseDto;
+import com.moeum.moeum.api.ledger.item.dto.ItemToSummaryDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemUpdateRequestDto;
 import com.moeum.moeum.api.ledger.item.mapper.ItemMapper;
 import com.moeum.moeum.api.ledger.item.repository.ItemRepository;
@@ -60,6 +61,10 @@ public class ItemService {
     public void delete(Long userId, Long itemId) {
         Item item = getEntity(userId, itemId);
         itemRepository.delete(item);
+    }
+
+    public List<ItemToSummaryDto> getSummary(Long categoryId) {
+        return itemRepository.findAllByCategoryId(categoryId);
     }
     
     public Item getEntity(Long userId, Long itemId) {

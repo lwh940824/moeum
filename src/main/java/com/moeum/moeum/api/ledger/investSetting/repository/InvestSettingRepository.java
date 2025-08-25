@@ -17,4 +17,12 @@ public interface InvestSettingRepository extends JpaRepository<InvestSetting, Lo
         where s.category.user.id = #{userId}
     """)
     List<InvestSetting> findAllByUserId(Long userId);
+
+    @Query("""
+        select s 
+        from InvestSetting s
+        where s.category.user.id = #{userId} 
+        and s.category.id = #{categoryId}
+    """)
+    Optional<InvestSetting> findByUserIdAndCategoryId(Long userId, Long categoryId);
 }
