@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,11 @@ public class InvestSettingService {
     @Transactional(readOnly = true)
     public InvestSettingResponseDto findById(Long userId, Long investSettingId) {
         return investSettingMapper.toDto(getEntity(userId, investSettingId));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<InvestSetting> findByCategoryId(Long userId, Long categoryId) {
+        return investSettingRepository.findByUserIdAndCategoryId(userId, categoryId);
     }
 
     @Transactional
