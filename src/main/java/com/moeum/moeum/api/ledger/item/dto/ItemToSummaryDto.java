@@ -1,7 +1,7 @@
 package com.moeum.moeum.api.ledger.item.dto;
 
 public record ItemToSummaryDto(
-        Long year,
-        Long month,
+        Integer year,
+        Integer month,
         Long principal
 ) {}

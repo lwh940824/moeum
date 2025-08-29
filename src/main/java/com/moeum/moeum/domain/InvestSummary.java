@@ -15,10 +15,10 @@ public class InvestSummary {
     private Long id;
 
     @Column(nullable = false)
-    private Long year;
+    private Integer year;
 
     @Column(nullable = false)
-    private Long month;
+    private Integer month;
 
     @Column(nullable = false)
     private Long principal;
@@ -28,7 +28,7 @@ public class InvestSummary {
     private InvestSetting investSetting;
 
     @Builder
-    public InvestSummary(Long year, Long month, Long principal) {
+    public InvestSummary(Integer year, Integer month, Long principal) {
         this.year = year;
         this.month = month;
         this.principal = principal;

@@ -130,8 +130,8 @@ CREATE TABLE `ledger_invest_setting` (
 CREATE TABLE `ledger_invest_summary` (
                                               `id`     BIGINT NOT NULL AUTO_INCREMENT,
                                               `invest_setting_id` BIGINT NOT NULL,
-                                              `year`        SMALLINT NOT NULL,
-                                              `month`       TINYINT  NOT NULL,
+                                              `year`        INTEGER NOT NULL,
+                                              `month`       INTEGER  NOT NULL,
                                               `principal`   bigint   NOT NULL DEFAULT 0,
                                               `reg_dt`      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                               `reg_user`    VARCHAR(50) NOT NULL,
