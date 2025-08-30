@@ -54,6 +54,6 @@ public class InvestSummaryService {
 
     @Transactional
     public void deleteAllByInvestSettingId(Long investSettingId) {
-        investSummaryRepository.deleteByInvestSettingId(investSettingId);
+        investSummaryRepository.deleteAllByInvestSettingId(investSettingId);
     }
 }
