@@ -64,21 +64,31 @@ public class ItemService {
     public ItemResponseDto update(Long userId, Long itemId, ItemUpdateRequestDto itemUpdateRequestDto) {
         Item item = getEntity(userId, itemId);
 
-        // 1. 수정 필요! 연월이 바뀌는 경우는 집계가 꼬이게 됨
-        // 2. 카테고리 변경 되는 경우,
-
+        // 존재하면 무조건 기존 item 금액 빼기
         investSettingService.findByCategoryId(userId, item.getCategory().getId())
                 .ifPresent(investSetting -> {
-                    Long addAmount = itemUpdateRequestDto.amount() - item.getAmount();
                     investSummaryService.create(
                             InvestSummaryCreateDto.builder()
                                     .investSettingId(investSetting.getId())
                                     .year(item.getOccurred_at().getYear())
                                     .month(item.getOccurred_at().getMonthValue())
-                                    .principal(addAmount)
+                                    .principal(item.getAmount() * -1)
                                     .build()
                     );
-        });
+                });
+
+        // 현재 request만큼 investSummary 업서트
+        investSettingService.findByCategoryId(userId, itemUpdateRequestDto.categoryId())
+                .ifPresent(investSetting ->
+                        investSummaryService.create(
+                                InvestSummaryCreateDto.builder()
+                                        .investSettingId(investSetting.getId())
+                                        .year(itemUpdateRequestDto.occurred_at().getYear())
+                                        .month(itemUpdateRequestDto.occurred_at().getMonthValue())
+                                        .principal(itemUpdateRequestDto.amount())
+                                        .build()
+                        )
+                );
 
         item.update(itemUpdateRequestDto.amount(), itemUpdateRequestDto.occurred_at(), itemUpdateRequestDto.memo());
 
