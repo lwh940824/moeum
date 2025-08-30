@@ -61,6 +61,10 @@ public class InvestSettingService {
     @Transactional
     public void delete(Long userId, Long id) {
         InvestSetting investSetting = getEntity(userId, id);
+
+        // 해당 investSetting 으로 등록된 investSummary 삭제
+        investSummaryService.deleteAllByInvestSettingId(investSetting.getId());
+
         investSettingRepository.delete(investSetting);
     }
 

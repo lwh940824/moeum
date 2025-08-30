@@ -7,10 +7,4 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface InvestSummaryRepository extends JpaRepository<InvestSummary, Long>, InvestSummaryQueryRepository {
-
-    @Query("""
-        
-    """)
-
-    void deleteByInvestSettingId(Long investSettingId);
 }

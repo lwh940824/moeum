@@ -18,6 +18,9 @@ import java.util.List;
 public class InvestSummaryService {
     private final InvestSummaryRepository investSummaryRepository;
     private final InvestSummaryMapper investSummaryMapper;
+//
+//    @Transactional(readOnly = true)
+//    public List<>
 
     @Transactional
     public void create(InvestSummaryCreateDto investSummaryCreateDto) {
@@ -47,5 +50,10 @@ public class InvestSummaryService {
         }).toList();
 
         investSummaryRepository.saveAll(investSummaryEntityList);
+    }
+
+    @Transactional
+    public void deleteAllByInvestSettingId(Long investSettingId) {
+        investSummaryRepository.deleteByInvestSettingId(investSettingId);
     }
 }
