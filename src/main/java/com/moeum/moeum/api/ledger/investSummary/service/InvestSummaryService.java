@@ -18,9 +18,13 @@ import java.util.List;
 public class InvestSummaryService {
     private final InvestSummaryRepository investSummaryRepository;
     private final InvestSummaryMapper investSummaryMapper;
-//
-//    @Transactional(readOnly = true)
-//    public List<>
+
+    @Transactional(readOnly = true)
+    public List<InvestSummaryResponseDto> getInvestSummaryList(Long investSettingId) {
+        return investSummaryRepository.findAllByInvestSettingId(investSettingId).stream()
+                .map(investSummaryMapper::toDto)
+                .toList();
+    }
 
     @Transactional
     public void create(InvestSummaryCreateDto investSummaryCreateDto) {
@@ -35,7 +39,7 @@ public class InvestSummaryService {
     @Transactional
     public void createAll(InvestSetting investSetting, List<ItemToSummaryDto> summaryList) {
         // 기존 등록된 InvestSummary 삭제
-        investSummaryRepository.deleteByInvestSettingId(investSetting.getId());
+        investSummaryRepository.deleteAllByInvestSettingId(investSetting.getId());
 
         List<InvestSummary> investSummaryEntityList = summaryList.stream().map(summary -> {
             InvestSummary investSummary = investSummaryMapper.toEntity(

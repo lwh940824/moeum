@@ -58,7 +58,8 @@ public class InvestSummaryQueryRepositoryImpl implements InvestSummaryQueryRepos
     public void deleteAllByInvestSettingId(Long investSettingId) {
         queryFactory
                 .delete(investSummary)
-                .where(investSummary.investSetting.id.eq(investSettingId));
+                .where(investSummary.investSetting.id.eq(investSettingId))
+                .execute();
     }
 
     private InvestSummary selectInvestSummary(Long investSettingId, Integer year, Integer month) {

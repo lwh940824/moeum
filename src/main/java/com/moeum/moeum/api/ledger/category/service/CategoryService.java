@@ -32,15 +32,15 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponseDto findById(Long userId, Long categoryId) {
-        return categoryMapper.toDto(getEntity(userId, categoryId));
-    }
-
-    @Transactional(readOnly = true)
     public List<CategoryResponseDto> getCategoryGroupList(Long userId) {
         return categoryRepository.findAllByUserIdAndGroupIdIsNull(userId).stream()
                 .map(categoryMapper::toDto)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryResponseDto findById(Long userId, Long categoryId) {
+        return categoryMapper.toDto(getEntity(userId, categoryId));
     }
 
     @Transactional
