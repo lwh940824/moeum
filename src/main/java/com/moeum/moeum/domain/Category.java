@@ -75,7 +75,7 @@ public class Category extends BaseEntity {
     }
 
     @Builder
-    public Category(String name, CategoryType categoryType, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, List<Category> categoryList, User user) {
+    public Category(String name, CategoryType categoryType, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, List<Category> categoryList, YnType useYn, User user) {
         this.name = name;
         this.categoryType = categoryType;
         this.imageUrl = imageUrl;
@@ -83,6 +83,7 @@ public class Category extends BaseEntity {
         this.recurringType = recurringType;
         this.recurringStartDt = recurringStartDt;
         this.recurringEndDt = recurringEndDt;
+        this.useYn = useYn;
         this.user = user;
     }
 }

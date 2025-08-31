@@ -1,0 +1,34 @@
+### 토큰 발급
+POST http://localhost:8080/api/auth/dev-token?email=me@local.test&name=Me
+
+> {%
+    client.test("issue token", function() {
+        client.global.set("token", response.body.token);
+    });
+%}
+
+### 카테고리 생성
+POST {{host}}/api/category
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZUBsb2NhbC50ZXN0IiwibmFtZSI6Im1lQGxvY2FsLnRlc3QiLCJpYXQiOjE3NTY2MzA0MDYsImV4cCI6MTc1ODc3Nzg5MH0.bDCbtFlydTTVnuw0Col-GXZ6gY46WZ1wbD1PiDBh_HI
+Content-Type: application/json
+
+{
+  "name": "적금",
+  "categoryType": "INCOME",
+  "imageUrl": "1",
+  "investmentYn": "N",
+  "useYn": "Y"
+}
+
+### 카테고리 수정
+PUT {{host}}/api/category/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZUBsb2NhbC50ZXN0IiwibmFtZSI6Im1lQGxvY2FsLnRlc3QiLCJpYXQiOjE3NTY2MzA0MDYsImV4cCI6MTc1ODc3Nzg5MH0.bDCbtFlydTTVnuw0Col-GXZ6gY46WZ1wbD1PiDBh_HI
+Content-Type: application/json
+
+{
+  "name": "적금변경",
+  "categoryType": "EXPENSE",
+  "imageUrl": "1"
+}
+
+### 카테고리 사용여부 변경

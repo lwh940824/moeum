@@ -29,6 +29,9 @@ public record CategoryCreateRequestDto(
 
         LocalDateTime recurringStartDt,
 
-        LocalDateTime recurringEndDt
+        LocalDateTime recurringEndDt,
+
+        @NotNull
+        YnType useYn
 ) {
 }
