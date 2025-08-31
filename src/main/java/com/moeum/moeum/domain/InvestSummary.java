@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-@Table(name = "legder_invest_summary")
+@Table(name = "ledger_invest_summary")
 public class InvestSummary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +40,7 @@ public class InvestSummary {
     }
 
     public void addPrincipal(Long principal) {
+        if (principal == null) return;
         this.principal += principal;
     }
 }

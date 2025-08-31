@@ -42,6 +42,7 @@ public class Category extends BaseEntity {
 
     private LocalDateTime recurringEndDt;
 
+    @Enumerated(EnumType.STRING)
     private YnType useYn;
 
     @OneToMany(mappedBy = "category")

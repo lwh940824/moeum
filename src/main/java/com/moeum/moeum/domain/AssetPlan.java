@@ -13,7 +13,7 @@ public class AssetPlan extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Integer assetPlanId;
+    private Integer id;
 
     private Integer interest_rate;
 

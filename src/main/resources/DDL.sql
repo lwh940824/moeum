@@ -16,7 +16,7 @@ CREATE TABLE `user` (
 
                         CONSTRAINT `PK_USER` PRIMARY KEY (`id`),
                         CONSTRAINT `CHK_USER_PROVIDER` CHECK (`provider` IN ('GOOGLE','KAKAO') OR `provider` IS NULL)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 -- 결제수단
 CREATE TABLE `ledger_payment` (
@@ -32,7 +32,7 @@ CREATE TABLE `ledger_payment` (
 
                                   CONSTRAINT `PK_LEDGER_PAYMENT` PRIMARY KEY (`id`, `user_id`),
                                   CONSTRAINT `CHK_PAYMENT_TYPE` CHECK (`payment_type` IN ('CASH','ATM','CREDIT','ETC') OR `payment_type` IS NULL)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 -- 카테고리
 CREATE TABLE `ledger_category` (
@@ -52,7 +52,7 @@ CREATE TABLE `ledger_category` (
                                    CONSTRAINT `PK_LEDGER_CATEGORY` PRIMARY KEY (`id`),
                                    CONSTRAINT `CHK_CATEGORY_INVEST_YN` CHECK (`investment_yn` IN ('Y','N')),
                                    CONSTRAINT `CHK_CATEGORY_USE_YN` CHECK (`use_yn` IN ('Y','N'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 -- 반복 계획
 CREATE TABLE `ledger_item_plan` (
@@ -74,7 +74,7 @@ CREATE TABLE `ledger_item_plan` (
 
                                     CONSTRAINT `PK_LEDGER_ITEM_PLAN` PRIMARY KEY (`id`),
                                     CONSTRAINT `CHK_RECURRING_TYPE` CHECK (`recurring_type` IN ('DAY','WEEK','MONTH'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 -- 아이템
 CREATE TABLE `ledger_item` (
@@ -92,7 +92,7 @@ CREATE TABLE `ledger_item` (
                                `mod_user`     VARCHAR(50) NOT NULL,
 
                                CONSTRAINT `PK_LEDGER_ITEM` PRIMARY KEY (`id`, `category_id`, `payment_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 -- 자산 계획
 CREATE TABLE `ledger_asset_plan` (
@@ -108,7 +108,7 @@ CREATE TABLE `ledger_asset_plan` (
 
                                      CONSTRAINT `PK_LEDGER_ASSET_PLAN` PRIMARY KEY (`id`, `category_id`),
                                      CONSTRAINT `CHK_INTEREST_TYPE` CHECK (`interest_type` IN ('SIMPLE','COMPOUND') OR `interest_type` IS NULL)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 -- 투자 집계 설정
 CREATE TABLE `ledger_invest_setting` (
@@ -124,7 +124,7 @@ CREATE TABLE `ledger_invest_setting` (
                                               UNIQUE KEY `UQ_LEDGER_INVEST_SETTING` (`category_id`),
                                               CHECK (`show_yn` IN ('Y','N')),
                                               CHECK (`use_yn` IN ('Y','N'))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 -- 투자 집계
 CREATE TABLE `ledger_invest_summary` (
@@ -140,4 +140,4 @@ CREATE TABLE `ledger_invest_summary` (
                                               CONSTRAINT `PK_LEDGER_INVEST_SUMMARY` PRIMARY KEY (`id`),
                                               UNIQUE KEY `UQ_LEDGER_INVEST_SUMMARY` (`invest_setting_id`,`year`,`month`),
                                               CHECK (`month` BETWEEN 1 AND 12)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);

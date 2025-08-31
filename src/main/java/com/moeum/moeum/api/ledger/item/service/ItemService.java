@@ -1,8 +1,9 @@
 package com.moeum.moeum.api.ledger.item.service;
 
 import com.moeum.moeum.api.ledger.category.service.CategoryService;
-import com.moeum.moeum.api.ledger.investSetting.service.InvestSettingService;
+import com.moeum.moeum.api.ledger.investSetting.repository.InvestSettingRepository;
 import com.moeum.moeum.api.ledger.investSummary.dto.InvestSummaryCreateDto;
+import com.moeum.moeum.api.ledger.investSummary.repository.InvestSummaryRepository;
 import com.moeum.moeum.api.ledger.investSummary.service.InvestSummaryService;
 import com.moeum.moeum.api.ledger.item.dto.ItemCreateRequestDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemResponseDto;
@@ -27,8 +28,9 @@ public class ItemService {
     private final ItemMapper itemMapper;
     private final ItemRepository itemRepository;
     private final CategoryService categoryService;
-    private final InvestSettingService investSettingService;
+    private final InvestSummaryRepository investSummaryRepository;
     private final InvestSummaryService investSummaryService;
+    private final InvestSettingRepository investSettingRepository;
 
     public List<ItemResponseDto> findAllByUserId(Long userId) {
         return itemRepository.findAllByUserId(userId).stream().map(itemMapper::toDto).toList();
@@ -46,7 +48,7 @@ public class ItemService {
         item.changeCategory(category);
         itemRepository.save(item);
 
-        investSettingService.findByCategoryId(userId, category.getId())
+        investSettingRepository.findByUserIdAndCategoryId(userId, category.getId())
                 .ifPresent(investSetting ->
                         investSummaryService.create(
                                 InvestSummaryCreateDto.builder().
@@ -65,7 +67,7 @@ public class ItemService {
         Item item = getEntity(userId, itemId);
 
         // 존재하면 무조건 기존 item 금액 빼기
-        investSettingService.findByCategoryId(userId, item.getCategory().getId())
+        investSettingRepository.findByUserIdAndCategoryId(userId, item.getCategory().getId())
                 .ifPresent(investSetting -> {
                     investSummaryService.create(
                             InvestSummaryCreateDto.builder()
@@ -78,7 +80,7 @@ public class ItemService {
                 });
 
         // 현재 request만큼 investSummary 업서트
-        investSettingService.findByCategoryId(userId, itemUpdateRequestDto.categoryId())
+        investSettingRepository.findByUserIdAndCategoryId(userId, itemUpdateRequestDto.categoryId())
                 .ifPresent(investSetting ->
                         investSummaryService.create(
                                 InvestSummaryCreateDto.builder()
