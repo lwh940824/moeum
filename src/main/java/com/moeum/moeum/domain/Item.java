@@ -21,7 +21,7 @@ public class Item extends BaseEntity {
 
     private Long amount;
 
-    private LocalDateTime occurred_at;
+    private LocalDateTime occurredAt;
 
     private String memo;
 
@@ -33,9 +33,9 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
 
-    public void update(Long amount, LocalDateTime occurred_at, String memo) {
+    public void update(Long amount, LocalDateTime occurredAt, String memo) {
         this.amount = amount;
-        this.occurred_at = occurred_at;
+        this.occurredAt = occurredAt;
         this.memo = memo;
     }
 
@@ -50,10 +50,15 @@ public class Item extends BaseEntity {
         this.category = category;
     }
 
+    public void changePayment(Payment payment) {
+        if (payment == null) throw new CustomException(ErrorCode.REQUIRED_PAYMENT);
+        this.payment = payment;
+    }
+
     @Builder
-    public Item(Long itemId, Long amount, LocalDateTime occurred_at, Category category, Payment payment) {
+    public Item(Long itemId, Long amount, LocalDateTime occurredAt, Category category, Payment payment) {
         this.amount = amount;
-        this.occurred_at = occurred_at;
+        this.occurredAt = occurredAt;
         this.category = category;
         this.payment = payment;
     }

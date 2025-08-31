@@ -11,8 +11,10 @@ import com.moeum.moeum.api.ledger.item.dto.ItemToSummaryDto;
 import com.moeum.moeum.api.ledger.item.dto.ItemUpdateRequestDto;
 import com.moeum.moeum.api.ledger.item.mapper.ItemMapper;
 import com.moeum.moeum.api.ledger.item.repository.ItemRepository;
+import com.moeum.moeum.api.ledger.payment.service.PaymentService;
 import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.domain.Item;
+import com.moeum.moeum.domain.Payment;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class ItemService {
     private final ItemMapper itemMapper;
     private final ItemRepository itemRepository;
     private final CategoryService categoryService;
-    private final InvestSummaryRepository investSummaryRepository;
+    private final PaymentService paymentService;
     private final InvestSummaryService investSummaryService;
     private final InvestSettingRepository investSettingRepository;
 
@@ -45,7 +47,9 @@ public class ItemService {
         Item item = itemMapper.toEntity(itemCreateRequestDto);
 
         Category category = categoryService.getEntity(userId, itemCreateRequestDto.categoryId());
+        Payment payment = paymentService.getEntity(userId, itemCreateRequestDto.paymentId());
         item.changeCategory(category);
+        item.changePayment(payment);
         itemRepository.save(item);
 
         investSettingRepository.findByUserIdAndCategoryId(userId, category.getId())
@@ -53,8 +57,8 @@ public class ItemService {
                         investSummaryService.create(
                                 InvestSummaryCreateDto.builder().
                                         investSettingId(investSetting.getId())
-                                        .year(item.getOccurred_at().getYear())
-                                        .month(item.getOccurred_at().getMonthValue())
+                                        .year(item.getOccurredAt().getYear())
+                                        .month(item.getOccurredAt().getMonthValue())
                                         .principal(item.getAmount())
                                         .build()
                         )
@@ -72,8 +76,8 @@ public class ItemService {
                     investSummaryService.create(
                             InvestSummaryCreateDto.builder()
                                     .investSettingId(investSetting.getId())
-                                    .year(item.getOccurred_at().getYear())
-                                    .month(item.getOccurred_at().getMonthValue())
+                                    .year(item.getOccurredAt().getYear())
+                                    .month(item.getOccurredAt().getMonthValue())
                                     .principal(item.getAmount() * -1)
                                     .build()
                     );
@@ -95,7 +99,9 @@ public class ItemService {
         item.update(itemUpdateRequestDto.amount(), itemUpdateRequestDto.occurred_at(), itemUpdateRequestDto.memo());
 
         Category category = categoryService.getEntity(userId, itemUpdateRequestDto.categoryId());
+        Payment payment = paymentService.getEntity(userId, itemUpdateRequestDto.paymentId());
         item.changeCategory(category);
+        item.changePayment(payment);
 
         return itemMapper.toDto(item);
     }

@@ -30,13 +30,13 @@ public class CalendarQueryRepositoryImpl implements CalendarQueryRepository {
                         category.name,
                         category.id,
                         category.name,
-                        item.occurred_at,
+                        item.occurredAt,
                         item.amount,
                         item.memo
                 ))
                 .join(category, category)
                 .where(category.user.id.eq(userId)
-                        .and(item.occurred_at.between(startDate, endDate)))
+                        .and(item.occurredAt.between(startDate, endDate)))
                 .fetch();
     }
 }
