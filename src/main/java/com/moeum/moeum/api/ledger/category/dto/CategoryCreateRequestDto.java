@@ -25,12 +25,6 @@ public record CategoryCreateRequestDto(
         @NotNull
         YnType investmentYn,
 
-        RecurringType recurringType,
-
-        LocalDateTime recurringStartDt,
-
-        LocalDateTime recurringEndDt,
-
         @NotNull
         YnType useYn
 ) {

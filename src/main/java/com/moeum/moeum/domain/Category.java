@@ -36,13 +36,6 @@ public class Category extends BaseEntity {
     private YnType investmentYn;
 
     @Enumerated(EnumType.STRING)
-    private RecurringType recurringType;
-
-    private LocalDateTime recurringStartDt;
-
-    private LocalDateTime recurringEndDt;
-
-    @Enumerated(EnumType.STRING)
     private YnType useYn;
 
     @OneToMany(mappedBy = "category")
@@ -75,14 +68,11 @@ public class Category extends BaseEntity {
     }
 
     @Builder
-    public Category(String name, CategoryType categoryType, String imageUrl, YnType investmentYn, RecurringType recurringType, LocalDateTime recurringStartDt, LocalDateTime recurringEndDt, List<Category> categoryList, YnType useYn, User user) {
+    public Category(String name, CategoryType categoryType, String imageUrl, YnType investmentYn, List<Category> categoryList, YnType useYn, User user) {
         this.name = name;
         this.categoryType = categoryType;
         this.imageUrl = imageUrl;
         this.investmentYn = investmentYn;
-        this.recurringType = recurringType;
-        this.recurringStartDt = recurringStartDt;
-        this.recurringEndDt = recurringEndDt;
         this.useYn = useYn;
         this.user = user;
     }
