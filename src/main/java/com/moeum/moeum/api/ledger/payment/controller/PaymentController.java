@@ -1,16 +1,16 @@
 package com.moeum.moeum.api.ledger.payment.controller;
 
+import com.moeum.moeum.api.ledger.payment.dto.PaymentCreateRequestDto;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentResponseDto;
+import com.moeum.moeum.api.ledger.payment.dto.PaymentUpdateRequestDto;
 import com.moeum.moeum.api.ledger.payment.service.PaymentService;
 import com.moeum.moeum.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +32,21 @@ public class PaymentController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable Long paymentId) {
         return ResponseEntity.ok(paymentService.findByUserIdAndId(userDetails.getId(), paymentId));
+    }
+
+    @PostMapping
+    public ResponseEntity<PaymentResponseDto> create(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                     @RequestBody PaymentCreateRequestDto paymentCreateRequestDto) {
+        PaymentResponseDto paymentResponseDto = paymentService.create(userDetails.getId(), paymentCreateRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                paymentResponseDto
+        );
+    }
+
+    @PutMapping("/{paymentId}")
+    public ResponseEntity<PaymentResponseDto> update(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                     @PathVariable Long paymentId,
+                                                     @RequestBody PaymentUpdateRequestDto paymentUpdateRequestDto) {
+        return ResponseEntity.ok(paymentService.update(userDetails.getId(), paymentId, paymentUpdateRequestDto));
     }
 }

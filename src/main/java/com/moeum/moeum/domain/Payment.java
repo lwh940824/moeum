@@ -26,6 +26,11 @@ public class Payment extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void update(String name, PaymentType paymentType) {
+        this.name = name;
+        this.paymentType = paymentType;
+    }
+
     public void assignUser(User user) {
         this.user = user;
     }

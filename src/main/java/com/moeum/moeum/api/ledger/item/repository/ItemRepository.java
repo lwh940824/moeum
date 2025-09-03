@@ -12,14 +12,14 @@ public interface ItemRepository extends JpaRepository<Item, Long>, ItemQueryRepo
 
     @Query("""
         SELECT  new com.moeum.moeum.api.ledger.item.dto.ItemToSummaryDto(
-            YEAR(i.occurred_at),
-            MONTH(i.occurred_at),
+            YEAR(i.occurredAt),
+            MONTH(i.occurredAt),
             SUM(i.amount)
         )
         FROM Item i
         WHERE i.category.id = :categoryId
-        GROUP BY YEAR(i.occurred_at), MONTH(i.occurred_at)
-        ORDER BY YEAR(i.occurred_at), MONTH(i.occurred_at)
+        GROUP BY YEAR(i.occurredAt), MONTH(i.occurredAt)
+        ORDER BY YEAR(i.occurredAt), MONTH(i.occurredAt)
     """)
     List<ItemToSummaryDto> findAllByCategoryId(@Param("categoryId") Long categoryId);
 }
