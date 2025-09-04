@@ -3,13 +3,13 @@ POST http://localhost:8080/api/auth/dev-token?email=me@local.test&name=Me
 
 > {%
     client.test("issue token", function() {
-        client.global.set("token", response.body.token);
+        client.global.set("token", response.body.jwt);
     });
 %}
 
 ### 카테고리 생성
 POST {{host}}/api/category
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZUBsb2NhbC50ZXN0IiwibmFtZSI6Im1lQGxvY2FsLnRlc3QiLCJpYXQiOjE3NTY2MzA0MDYsImV4cCI6MTc1ODc3Nzg5MH0.bDCbtFlydTTVnuw0Col-GXZ6gY46WZ1wbD1PiDBh_HI
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
