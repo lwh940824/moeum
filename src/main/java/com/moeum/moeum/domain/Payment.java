@@ -1,6 +1,7 @@
 package com.moeum.moeum.domain;
 
 import com.moeum.moeum.type.PaymentType;
+import com.moeum.moeum.type.YnType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,10 @@ public class Payment extends BaseEntity {
     @Column(nullable = false)
     private PaymentType paymentType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private YnType useYn;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -29,6 +34,10 @@ public class Payment extends BaseEntity {
     public void update(String name, PaymentType paymentType) {
         this.name = name;
         this.paymentType = paymentType;
+    }
+
+    public void changeUseYn(YnType useYn) {
+        this.useYn = useYn;
     }
 
     public void assignUser(User user) {

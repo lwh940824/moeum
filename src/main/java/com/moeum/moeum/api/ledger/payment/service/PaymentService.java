@@ -3,15 +3,18 @@ package com.moeum.moeum.api.ledger.payment.service;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentCreateRequestDto;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentResponseDto;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentUpdateRequestDto;
+import com.moeum.moeum.api.ledger.payment.dto.PaymentUseYnPatchRequestDto;
 import com.moeum.moeum.api.ledger.payment.mapper.PaymentMapper;
 import com.moeum.moeum.api.ledger.payment.repository.PaymentRepository;
 import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Payment;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -60,6 +63,16 @@ public class PaymentService {
         payment.update(paymentUpdateRequestDto.name(), paymentUpdateRequestDto.paymentType());
 
         return paymentMapper.toDto(payment);
+    }
+
+    @Transactional
+    public void changeUseYn(Long userId, Long paymentId, @RequestBody @Valid PaymentUseYnPatchRequestDto paymentUseYnPatchRequestDto) {
+        Payment payment = getEntity(userId, paymentId);
+
+        // 다른 경우만 update
+        if (!payment.getUseYn().equals(paymentUseYnPatchRequestDto.useYn())) {
+            payment.changeUseYn(paymentUseYnPatchRequestDto.useYn());
+        }
     }
 
     public Payment getEntity(Long userId, Long paymentId) {

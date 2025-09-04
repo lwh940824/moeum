@@ -24,6 +24,7 @@ CREATE TABLE `ledger_payment` (
                                   `user_id`      BIGINT NOT NULL COMMENT '사용자 아이디',
                                   `name`         VARCHAR(100) NULL COMMENT '결제수단 이름',
                                   `payment_type` VARCHAR(10)  NULL COMMENT '결제수단 타입',
+                                  `use_yn`        VARCHAR(1)   NOT NULL DEFAULT 'Y' COMMENT '결제수단 사용여부 (Y/N)',
 
                                   `reg_dt`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                   `reg_user`     VARCHAR(50) NOT NULL,
@@ -31,7 +32,9 @@ CREATE TABLE `ledger_payment` (
                                   `mod_user`     VARCHAR(50) NOT NULL,
 
                                   CONSTRAINT `PK_LEDGER_PAYMENT` PRIMARY KEY (`id`, `user_id`),
-                                  CONSTRAINT `CHK_PAYMENT_TYPE` CHECK (`payment_type` IN ('CASH','ATM','CREDIT','ETC') OR `payment_type` IS NULL)
+                                  CONSTRAINT `CHK_PAYMENT_TYPE` CHECK (`payment_type` IN ('CASH','ATM','CREDIT','ETC') OR `payment_type` IS NULL),
+                                  CONSTRAINT `CHK_PAYMENT_USE_YN` CHECK (`use_yn` IN ('Y','N')),
+                                  CONSTRAINT `uk_payment_user_name` UNIQUE (`user_id`, `name`)
 );
 
 -- 카테고리

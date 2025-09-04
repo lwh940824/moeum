@@ -3,6 +3,7 @@ package com.moeum.moeum.api.ledger.payment.controller;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentCreateRequestDto;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentResponseDto;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentUpdateRequestDto;
+import com.moeum.moeum.api.ledger.payment.dto.PaymentUseYnPatchRequestDto;
 import com.moeum.moeum.api.ledger.payment.service.PaymentService;
 import com.moeum.moeum.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,5 +49,13 @@ public class PaymentController {
                                                      @PathVariable Long paymentId,
                                                      @RequestBody PaymentUpdateRequestDto paymentUpdateRequestDto) {
         return ResponseEntity.ok(paymentService.update(userDetails.getId(), paymentId, paymentUpdateRequestDto));
+    }
+
+    @PatchMapping("/{paymentId}/status")
+    public ResponseEntity<Void> changeUseYn(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                          @PathVariable Long paymentId,
+                                                          @RequestBody PaymentUseYnPatchRequestDto paymentUseYnPatchRequestDto) {
+        paymentService.changeUseYn(userDetails.getId(), paymentId, paymentUseYnPatchRequestDto);
+        return ResponseEntity.noContent().build();
     }
 }
