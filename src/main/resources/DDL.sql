@@ -84,7 +84,7 @@ CREATE TABLE `ledger_item` (
                                `id`      BIGINT NOT NULL AUTO_INCREMENT COMMENT '아이템 아이디',
                                `category_id`  BIGINT NOT NULL COMMENT '카테고리 아이디',
                                `payment_id`   BIGINT NOT NULL COMMENT '결제수단 아이디',
-                               `item_plan_id` BIGINT NOT NULL COMMENT '아이템 반복 아이디',
+                               `item_plan_id` BIGINT NULL COMMENT '아이템 반복 아이디',
                                `amount`       DECIMAL(10,2) NULL COMMENT '금액',
                                `occurred_at`  DATE          NULL COMMENT '날짜',
                                `memo`         VARCHAR(100)  NULL COMMENT '입출금 내용',
