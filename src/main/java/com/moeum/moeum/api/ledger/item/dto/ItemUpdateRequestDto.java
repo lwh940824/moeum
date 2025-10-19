@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public record ItemUpdateRequestDto(
         Long amount,
-        LocalDateTime occurred_at,
+        LocalDateTime occurredAt,
         String memo,
         Long categoryId,
         Long paymentId

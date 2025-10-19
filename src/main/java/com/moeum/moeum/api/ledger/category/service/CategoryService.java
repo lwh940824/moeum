@@ -26,14 +26,14 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryResponseDto> getCategoryList(Long userId) {
-        return categoryRepository.findAllByUserIdAndGroupIdIsNotNull(userId).stream()
+        return categoryRepository.findAllByUserIdAndParentCategoryIsNotNull(userId).stream()
                 .map(categoryMapper::toDto)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<CategoryResponseDto> getCategoryGroupList(Long userId) {
-        return categoryRepository.findAllByUserIdAndGroupIdIsNull(userId).stream()
+        return categoryRepository.findAllByUserIdAndParentCategoryIsNull(userId).stream()
                 .map(categoryMapper::toDto)
                 .toList();
     }
@@ -53,7 +53,7 @@ public class CategoryService {
 
         if (categoryCreateRequestDto.groupId() != null) {
             Category categoryGroup = getEntity(userId, categoryCreateRequestDto.groupId());
-            category.changeGroupId(categoryGroup);
+            category.changeParentCategory(categoryGroup);
         }
 
         return categoryMapper.toDto(categoryRepository.save(category));
@@ -70,14 +70,14 @@ public class CategoryService {
         );
 
         if (categoryUpdateRequestDto.groupId() == null) {
-            category.changeGroupId(null);
+            category.changeParentCategory(null);
         } else {
             Category categoryGroup = getEntity(userId, categoryUpdateRequestDto.groupId());
 
             // 자기 자신 설정 금지
             if (categoryGroup.getId().equals(categoryUpdateRequestDto.groupId())) throw new CustomException(ErrorCode.CATEGORY_ERROR);
 
-            category.changeGroupId(categoryGroup);
+            category.changeParentCategory(categoryGroup);
         }
 
         return categoryMapper.toDto(category);

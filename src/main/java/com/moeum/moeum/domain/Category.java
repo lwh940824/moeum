@@ -43,7 +43,7 @@ public class Category extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Category groupId;
+    private Category parentCategory;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -55,8 +55,8 @@ public class Category extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void changeGroupId(Category groupId) {
-        this.groupId = groupId;
+    public void changeParentCategory(Category parentCategory) {
+        this.parentCategory = parentCategory;
     }
 
     public void assignUser(User user) {

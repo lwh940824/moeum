@@ -1,6 +1,7 @@
 package com.moeum.moeum.api.ledger.item.repository;
 
 import com.moeum.moeum.domain.Item;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;

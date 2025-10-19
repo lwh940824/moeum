@@ -3,6 +3,7 @@ package com.moeum.moeum.api.ledger.item.repository;
 import com.moeum.moeum.domain.Item;
 import com.moeum.moeum.domain.QCategory;
 import com.moeum.moeum.domain.QItem;
+import com.moeum.moeum.domain.QPayment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,14 +21,18 @@ public class ItemQueryRepositoryImpl implements ItemQueryRepository {
     @Override
     public List<Item> findAllByUserId(Long userId) {
         QItem item = QItem.item;
-        QCategory category = QCategory.category;
+        QCategory childCategory = QCategory.category;
+        QCategory parentCategory = new QCategory("parentCategory");
+        QPayment payment = QPayment.payment;
 
         return queryFactory
                 .selectFrom(item)
-                .join(item.category, category).fetchJoin()
-                .where(
-                        category.user.id.eq(userId)
-                ).fetch();
+                .join(item.category, childCategory).fetchJoin()
+                .leftJoin(childCategory.parentCategory, parentCategory).fetchJoin()
+                .join(item.payment, payment).fetchJoin()
+                .where(childCategory.user.id.eq(userId))
+                .orderBy(item.occurredAt.desc())
+                .fetch();
     }
 
     @Override

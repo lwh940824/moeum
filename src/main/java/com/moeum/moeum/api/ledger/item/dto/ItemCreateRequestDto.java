@@ -6,6 +6,6 @@ public record ItemCreateRequestDto(
         Long categoryId,
         Long paymentId,
         Long amount,
-        LocalDateTime occurred_at,
+        LocalDateTime occurredAt,
         String memo
 ) {}

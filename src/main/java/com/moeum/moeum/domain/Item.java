@@ -25,6 +25,8 @@ public class Item extends BaseEntity {
 
     private String memo;
 
+    private Long itemPlanId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -56,10 +58,10 @@ public class Item extends BaseEntity {
     }
 
     @Builder
-    public Item(Long itemId, Long amount, LocalDateTime occurredAt, Category category, Payment payment) {
+    public Item(Long amount, LocalDateTime occurredAt, String memo, Long itemPlanId) {
         this.amount = amount;
         this.occurredAt = occurredAt;
-        this.category = category;
-        this.payment = payment;
+        this.memo = memo;
+        this.itemPlanId = itemPlanId;
     }
 }
