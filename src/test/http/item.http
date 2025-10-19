@@ -15,8 +15,8 @@ Content-Type: application/json
 {
   "categoryId": 2,
   "paymentId": 3,
-  "amount": 150000,
-  "occurredAt": "2025-09-08T14:30:00",
+  "amount": 1000,
+  "occurredAt": "2025-10-08T14:30:00",
   "memo": "메모"
 }
 
@@ -29,3 +29,12 @@ Content-Type: application/json
 GET {{host}}/api/item/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
+
+### 투자집계 생성
+POST {{host}}/api/invest-setting
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": 2
+}

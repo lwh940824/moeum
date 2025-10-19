@@ -1,5 +1,7 @@
 package com.moeum.moeum.api.ledger.investSetting.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public record InvestSettingCreateDto(
-        Long categoryId
+        @NotNull Long categoryId
 ) {}

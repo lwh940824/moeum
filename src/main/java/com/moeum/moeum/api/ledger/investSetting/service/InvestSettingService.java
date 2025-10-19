@@ -1,5 +1,6 @@
 package com.moeum.moeum.api.ledger.investSetting.service;
 
+import com.moeum.moeum.api.ledger.category.service.CategoryService;
 import com.moeum.moeum.api.ledger.investSetting.dto.InvestSettingCreateDto;
 import com.moeum.moeum.api.ledger.investSetting.dto.InvestSettingResponseDto;
 import com.moeum.moeum.api.ledger.investSetting.mapper.InvestSettingMapper;
@@ -7,6 +8,7 @@ import com.moeum.moeum.api.ledger.investSetting.repository.InvestSettingReposito
 import com.moeum.moeum.api.ledger.investSummary.service.InvestSummaryService;
 import com.moeum.moeum.api.ledger.item.dto.ItemToSummaryDto;
 import com.moeum.moeum.api.ledger.item.service.ItemService;
+import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.domain.InvestSetting;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
@@ -25,6 +27,7 @@ public class InvestSettingService {
     private final InvestSettingRepository investSettingRepository;
     private final ItemService itemService;
     private final InvestSummaryService investSummaryService;
+    private final CategoryService categoryService;
 
     @Transactional(readOnly = true)
     public List<InvestSettingResponseDto> getInvestSettingList(Long userId) {
@@ -48,7 +51,11 @@ public class InvestSettingService {
         investSettingRepository.findByUserIdAndCategoryId(userId, investSettingCreateDto.categoryId())
                 .ifPresent(investSetting -> {throw new CustomException(ErrorCode.CATEGORY_ERROR);});
 
-        InvestSetting investSetting = investSettingMapper.toEntity(investSettingCreateDto);
+        Category category = categoryService.getEntity(userId, investSettingCreateDto.categoryId());
+
+        InvestSetting investSetting = InvestSetting.builder()
+                .category(category)
+                .build();
         investSettingRepository.save(investSetting);
 
         // 현재 시점 이전에 생성된 해당 카테고리 가계부 집계 필요

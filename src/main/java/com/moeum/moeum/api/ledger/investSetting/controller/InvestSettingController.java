@@ -32,7 +32,7 @@ public class InvestSettingController {
     }
 
     @PostMapping
-    public ResponseEntity<InvestSettingResponseDto> postInvestSetting(@AuthenticationPrincipal CustomUserDetails userDetails, InvestSettingCreateDto investSettingCreateDto) {
+    public ResponseEntity<InvestSettingResponseDto> postInvestSetting(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody InvestSettingCreateDto investSettingCreateDto) {
         InvestSettingResponseDto investSettingResponseDto = investSettingService.create(userDetails.getId(), investSettingCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(investSettingResponseDto);
     }

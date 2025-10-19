@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "ledger_invest_setting")
-public class InvestSetting {
+public class InvestSetting extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -30,6 +30,8 @@ public class InvestSetting {
     @Builder
     public InvestSetting(Category category) {
         this.category = category;
+        this.useYn = YnType.Y;
+        this.showYn = YnType.Y;
     }
 
     public void changeShowYn(YnType showYn) {

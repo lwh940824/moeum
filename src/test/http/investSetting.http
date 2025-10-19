@@ -9,3 +9,10 @@ POST http://localhost:8080/api/auth/dev-token?email=me@local.test&name=Me
 
 ### 투자집계 생성
 POST {{host}}/api/invest-setting
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "categoryId": 2
+}
+
