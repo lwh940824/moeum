@@ -49,20 +49,19 @@ public class InvestSettingService {
     @Transactional
     public InvestSettingResponseDto create(Long userId, InvestSettingCreateDto investSettingCreateDto) {
         investSettingRepository.findByUserIdAndCategoryId(userId, investSettingCreateDto.categoryId())
-                .ifPresent(investSetting -> {throw new CustomException(ErrorCode.CATEGORY_ERROR);});
+                .ifPresent(investSetting -> {throw new CustomException(ErrorCode.EXISTS_INVEST_SETTING);});
 
         Category category = categoryService.getEntity(userId, investSettingCreateDto.categoryId());
 
-        InvestSetting investSetting = InvestSetting.builder()
-                .category(category)
-                .build();
-        investSettingRepository.save(investSetting);
+        InvestSetting investSetting = InvestSetting.builder().build();
+        investSetting.changeCategory(category);
+        InvestSetting save = investSettingRepository.save(investSetting);
 
         // 현재 시점 이전에 생성된 해당 카테고리 가계부 집계 필요
         List<ItemToSummaryDto> summaryList = itemService.getSummary(investSettingCreateDto.categoryId());
         investSummaryService.createAll(investSetting, summaryList);
 
-        return investSettingMapper.toDto(investSetting);
+        return investSettingMapper.toDto(save);
     }
 
     @Transactional

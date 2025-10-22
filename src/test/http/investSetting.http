@@ -17,16 +17,16 @@ Content-Type: application/json
 }
 
 ### 투자집계 리스트 조회
-POST {{host}}/api/invest-setting
+GET {{host}}/api/invest-setting
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ### 투자집계 단건 조회
-POST {{host}}/api/invest-setting/4
+GET {{host}}/api/invest-setting/11
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ### 투자집계 삭제
-DELETE {{host}}/api/invest-setting/3
+DELETE {{host}}/api/invest-setting/11
 Authorization: Bearer {{token}}
 Content-Type: application/json

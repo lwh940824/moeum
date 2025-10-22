@@ -17,21 +17,18 @@ public class InvestSetting extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YnType showYn;
+    private YnType showYn = YnType.Y;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YnType useYn;
+    private YnType useYn = YnType.Y;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false, unique = true)
     private Category category;
 
-    @Builder
-    public InvestSetting(Category category) {
+    public void changeCategory(Category category) {
         this.category = category;
-        this.useYn = YnType.Y;
-        this.showYn = YnType.Y;
     }
 
     public void changeShowYn(YnType showYn) {
@@ -42,5 +39,11 @@ public class InvestSetting extends BaseEntity {
     public void changeUseYn(YnType useYn) {
         if (this.useYn == useYn) return;
         this.useYn = useYn;
+    }
+
+    @Builder
+    public InvestSetting(YnType useYn, YnType showYn) {
+        this.useYn = (useYn != null) ? useYn : YnType.Y;
+        this.showYn = (showYn != null) ? showYn : YnType.Y;
     }
 }
