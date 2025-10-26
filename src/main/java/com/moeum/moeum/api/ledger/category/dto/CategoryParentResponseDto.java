@@ -1,15 +1,10 @@
 package com.moeum.moeum.api.ledger.category.dto;
 
 import com.moeum.moeum.type.CategoryType;
-import lombok.Builder;
 
-import java.util.List;
-
-@Builder
-public record CategoryResponseDto(
+public record CategoryParentResponseDto(
         Long id,
         String name,
         CategoryType categoryType,
-        String imageUrl,
-        List<CategoryResponseDto> children
-){}
+        String imageUrl
+) {}

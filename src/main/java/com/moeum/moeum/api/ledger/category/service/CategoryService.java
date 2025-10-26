@@ -14,7 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,17 +25,38 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final UserService userService;
 
-    @Transactional(readOnly = true)
-    public List<CategoryResponseDto> getCategoryList(Long userId) {
-        return categoryRepository.findAllByUserIdAndParentCategoryIsNotNull(userId).stream()
-                .map(categoryMapper::toDto)
-                .toList();
+    // 카테고리 플랫형
+    @Transactional
+    public List<CategoryResponseDto> getCategory(Long userId, Long categoryId) {
+        Category category = getEntity(userId, categoryId);
+        return null;
     }
 
-    @Transactional(readOnly = true)
-    public List<CategoryResponseDto> getCategoryGroupList(Long userId) {
-        return categoryRepository.findAllByUserIdAndParentCategoryIsNull(userId).stream()
-                .map(categoryMapper::toDto)
+    // 카테고리 트리형
+    @Transactional
+    public List<CategoryResponseDto> getCategoryTreeList(Long userId) {
+        List<Category> parentList = categoryRepository.findAllByUserIdAndParentCategoryIsNull(userId);
+        List<Category> childList = categoryRepository.findAllByUserIdAndParentCategoryIsNotNull(userId);
+
+        Map<Long, List<Category>> childMap = childList.stream()
+                .collect(Collectors.groupingBy(child -> child.getParentCategory().getId()));
+
+        return parentList.stream()
+                .map(parent -> {
+                    List<CategoryResponseDto> childResponseDtoList = Optional.ofNullable(childMap.get(parent.getId()))
+                            .orElse(Collections.emptyList())
+                            .stream()
+                            .map(categoryMapper::toDto)
+                            .toList();
+
+                    return CategoryResponseDto.builder()
+                            .id(parent.getId())
+                            .name(parent.getName())
+                            .categoryType(parent.getCategoryType())
+                            .imageUrl(parent.getImageUrl())
+                            .children(childResponseDtoList)
+                            .build();
+                })
                 .toList();
     }
 
@@ -43,6 +65,8 @@ public class CategoryService {
         return categoryMapper.toDto(getEntity(userId, categoryId));
     }
 
+
+    //TODO: 부모 카테고리는 ITEM 생성 불가(자식이 없는 경우는 가능)
     @Transactional
     public CategoryResponseDto create(Long userId, CategoryCreateRequestDto categoryCreateRequestDto) {
         categoryRepository.findByUserIdAndName(userId, categoryCreateRequestDto.name())
@@ -93,4 +117,6 @@ public class CategoryService {
         return categoryRepository.findByUserIdAndId(userId, categoryId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
     }
+
+//    public
 }

@@ -46,6 +46,7 @@ public class InvestSettingService {
         return investSettingRepository.findByUserIdAndCategoryId(userId, categoryId);
     }
 
+    // TODO: 부모 카테고리는 생성 불가(자식이 없는 경우는 가능)
     @Transactional
     public InvestSettingResponseDto create(Long userId, InvestSettingCreateDto investSettingCreateDto) {
         investSettingRepository.findByUserIdAndCategoryId(userId, investSettingCreateDto.categoryId())
