@@ -7,12 +7,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-@Table(name = "ledger_Item")
+@Table(name = "ledger_item")
 public class Item extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +27,6 @@ public class Item extends BaseEntity {
 
     private String memo;
 
-    private Long itemPlanId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -34,6 +34,13 @@ public class Item extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemPlan> itemPlanList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public void update(Long amount, LocalDateTime occurredAt, String memo) {
         this.amount = amount;
@@ -57,11 +64,28 @@ public class Item extends BaseEntity {
         this.payment = payment;
     }
 
+    public void addItemPlan(ItemPlan itemPlan) {
+        if (!this.itemPlanList.contains(itemPlan)) {
+            itemPlan.changeItem(this);
+            this.itemPlanList.add(itemPlan);
+        }
+    }
+
+    public void removeItemPlan(ItemPlan itemPlan) {
+        if (this.itemPlanList.contains(itemPlan)) {
+            itemPlan.changeItem(null);
+            this.itemPlanList.remove(itemPlan);
+        }
+    }
+
+    public void assignUser(User user) {
+        this.user = user;
+    }
+
     @Builder
-    public Item(Long amount, LocalDateTime occurredAt, String memo, Long itemPlanId) {
+    public Item(Long amount, LocalDateTime occurredAt, String memo) {
         this.amount = amount;
         this.occurredAt = occurredAt;
         this.memo = memo;
-        this.itemPlanId = itemPlanId;
     }
 }

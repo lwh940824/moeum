@@ -1,12 +1,10 @@
 package com.moeum.moeum.domain;
 
 import com.moeum.moeum.type.CategoryType;
-import com.moeum.moeum.type.RecurringType;
 import com.moeum.moeum.type.YnType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "category")
     private List<Item> itemList = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private Category parentCategory;
 
@@ -59,12 +57,12 @@ public class Category extends BaseEntity {
         this.parentCategory = parentCategory;
     }
 
-    public void assignUser(User user) {
-        this.user = user;
-    }
-
     public void deactivate(YnType useYn) {
         this.useYn = useYn;
+    }
+
+    public void assignUser(User user) {
+        this.user = user;
     }
 
     @Builder
