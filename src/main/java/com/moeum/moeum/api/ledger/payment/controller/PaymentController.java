@@ -24,7 +24,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping
-    public ResponseEntity<List<PaymentResponseDto>> getAllPayment(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<PaymentResponseDto>> getPaymentList(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok(paymentService.findAllByUserId(userDetails.getId()));
     }
 
