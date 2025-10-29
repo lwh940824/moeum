@@ -41,7 +41,7 @@ CREATE TABLE `ledger_payment` (
 CREATE TABLE `ledger_category` (
                                    `id`  BIGINT NOT NULL AUTO_INCREMENT COMMENT '카테고리 아이디',
                                    `group_id`    BIGINT NULL  COMMENT '카테고리 그룹 아이디',
-                                   `user_id`      BIGINT NOT NULL,
+                                   `user_id`      BIGINT NOT NULL COMMENT '사용자 아이디',
                                    `name`         VARCHAR(50)  NULL COMMENT '카테고리 소분류 이름',
                                    `investment_yn` VARCHAR(1)   NOT NULL DEFAULT 'N' COMMENT '자산계획 사용여부 (Y/N)',
                                    `image_url`    VARCHAR(255) NULL COMMENT '카테고리 아이콘 이미지',
@@ -60,16 +60,10 @@ CREATE TABLE `ledger_category` (
 -- 반복 계획
 CREATE TABLE `ledger_item_plan` (
                                     `id`       BIGINT NOT NULL AUTO_INCREMENT COMMENT '아이템 반복 아이디',
-                                    `user_id`            BIGINT       NOT NULL COMMENT '유저 아이디',
-                                    `category_id`        BIGINT       NOT NULL COMMENT '카테고리 아이디',
-                                    `payment_id`         BIGINT       NOT NULL COMMENT '결제수단 아이디',
+                                    `item_id`   BIGINT NOT NULL,
                                     `recurring_type`     VARCHAR(10)  NOT NULL COMMENT '반복 타입',
-                                    `recurring_start_dt` DATE         NOT NULL COMMENT '반복시작일',
-                                    `recurring_end_dt`   DATE         NOT NULL COMMENT '반복종료일',
-                                    `amount`             DECIMAL(10,2) NOT NULL COMMENT '금액',
-                                    `occurred_at`        DATE         NOT NULL COMMENT '날짜',
-                                    `memo`               VARCHAR(100) NULL COMMENT '입출금 내용',
-
+                                    `recurring_start_dt` DATETIME         NOT NULL COMMENT '반복시작일',
+                                    `recurring_end_dt`   DATETIME         NOT NULL COMMENT '반복종료일',
                                     `reg_dt`             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                     `reg_user`           VARCHAR(50) NOT NULL,
                                     `mod_dt`             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -84,6 +78,7 @@ CREATE TABLE `ledger_item` (
                                `id`      BIGINT NOT NULL AUTO_INCREMENT COMMENT '아이템 아이디',
                                `category_id`  BIGINT NOT NULL COMMENT '카테고리 아이디',
                                `payment_id`   BIGINT NOT NULL COMMENT '결제수단 아이디',
+                               `user_id`      BIGINT NOT NULL COMMENT '사용자 아이디',
                                `item_plan_id` BIGINT NULL COMMENT '아이템 반복 아이디',
                                `amount`       DECIMAL(10,2) NULL COMMENT '금액',
                                `occurred_at`  DATE          NULL COMMENT '날짜',

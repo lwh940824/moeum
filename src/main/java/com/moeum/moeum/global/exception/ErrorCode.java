@@ -15,19 +15,26 @@ public enum ErrorCode {
 //    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다."),
 //    REQUIRED_CATEGORY_GROUP(HttpStatus.BAD_REQUEST, "카테고리 그룹은 필수입니다."),
 
+    // 카테고리
     EXISTS_CATEGORY(HttpStatus.CONFLICT, "이미 존재하는 카테고리입니다."),
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다."),
     REQUIRED_CATEGORY(HttpStatus.BAD_REQUEST, "카테고리는 필수입니다."),
     CATEGORY_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카테고리 관련 작업중 오류 발생"),
 
+    // 아이템
     NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "존재하지 않는 아이템입니다."),
 
+    // 결제 수단
     EXISTS_PAYMENT(HttpStatus.CONFLICT, "이미 존재하는 결제수단입니다."),
     NOT_FOUND_PAYMENT(HttpStatus.NOT_FOUND, "존재하지 않는 결제수단입니다."),
     REQUIRED_PAYMENT(HttpStatus.BAD_REQUEST, "결제수단은 필수입니다."),
 
+    // 집계 설정
     EXISTS_INVEST_SETTING(HttpStatus.CONFLICT, "이미 존재하는 집계 설정입니다."),
     NOT_FOUND_INVEST_SETTING(HttpStatus.NOT_FOUND, "존재하지 않는 집계 설정입니다."),
+
+    // 반복 설정
+    NOT_FOUND_ITEM_PLAN(HttpStatus.NOT_FOUND, "존재하지 않는 반복 설정입니다."),
 
     // MinIO 관련 에러
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드중 문제가 발생했습니다."),

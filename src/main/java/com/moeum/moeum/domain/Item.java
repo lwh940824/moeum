@@ -35,8 +35,9 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemPlan> itemPlanList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_plan_id")
+    private ItemPlan itemPlan;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -64,18 +65,8 @@ public class Item extends BaseEntity {
         this.payment = payment;
     }
 
-    public void addItemPlan(ItemPlan itemPlan) {
-        if (!this.itemPlanList.contains(itemPlan)) {
-            itemPlan.changeItem(this);
-            this.itemPlanList.add(itemPlan);
-        }
-    }
-
-    public void removeItemPlan(ItemPlan itemPlan) {
-        if (this.itemPlanList.contains(itemPlan)) {
-            itemPlan.changeItem(null);
-            this.itemPlanList.remove(itemPlan);
-        }
+    public void assignItemPlan(ItemPlan itemPlan) {
+        this.itemPlan = itemPlan;
     }
 
     public void assignUser(User user) {

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,12 +29,28 @@ public class ItemPlan {
     @Column(nullable = false)
     private LocalDateTime recurringEndDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    private Long amount;
 
-    void changeItem(Item item) {
-        this.item = item;
+    private String memo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id", nullable = false)
+    private Payment payment;
+
+    @OneToMany(mappedBy = "item")
+    private List<Item> itemList = new ArrayList<>();
+
+    public void updateItem() {
+
+    }
+
+    public void addItem(Item item) {
+        this.itemList.add(item);
+        item.assignItemPlan(this);
     }
 
     @Builder

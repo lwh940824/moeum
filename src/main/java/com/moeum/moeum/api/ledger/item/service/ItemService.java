@@ -13,9 +13,11 @@ import com.moeum.moeum.api.ledger.item.dto.ItemUpdateRequestDto;
 import com.moeum.moeum.api.ledger.item.mapper.ItemMapper;
 import com.moeum.moeum.api.ledger.item.repository.ItemRepository;
 import com.moeum.moeum.api.ledger.payment.service.PaymentService;
+import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.domain.Item;
 import com.moeum.moeum.domain.Payment;
+import com.moeum.moeum.domain.User;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final CategoryService categoryService;
     private final PaymentService paymentService;
+    private final UserService userService;
     private final InvestSummaryService investSummaryService;
     private final InvestSettingRepository investSettingRepository;
 
@@ -106,8 +109,10 @@ public class ItemService {
 
         Category category = categoryService.getEntity(userId, itemCreateRequestDto.categoryId());
         Payment payment = paymentService.getEntity(userId, itemCreateRequestDto.paymentId());
+        User user = userService.getEntity(userId);
         item.changeCategory(category);
         item.changePayment(payment);
+        item.assignUser(user);
         itemRepository.save(item);
 
         investSettingRepository.findByUserIdAndCategoryId(userId, category.getId())

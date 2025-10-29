@@ -10,7 +10,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface InvestSettingMapper {
 
-    @Mapping(source = "category", target = "categoryResponseDto")
+//    @Mapping(source = "category", target = "categoryResponseDto")
     InvestSettingResponseDto toDto(InvestSetting investSetting);
 
     InvestSetting toEntity(InvestSettingCreateDto investSettingCreateDto);

@@ -10,6 +10,7 @@ import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Payment;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
+import com.moeum.moeum.type.YnType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +42,14 @@ public class PaymentService {
 
     @Transactional
     public PaymentResponseDto create(Long userId, PaymentCreateRequestDto paymentCreateRequestDto) {
-        paymentRepository.findByUserIdAndName(userId, paymentCreateRequestDto.name())
-                .ifPresent(payment -> {throw new CustomException(ErrorCode.EXISTS_PAYMENT);});
+        Optional<Payment> existPayment = paymentRepository.findByUserIdAndName(userId, paymentCreateRequestDto.name());
+
+        // 이미 생성되었던 결제수단이라면 사용 활성화만
+        if (existPayment.isPresent()) {
+            Payment payment = existPayment.get();
+            payment.changeUseYn(YnType.Y);
+            return paymentMapper.toDto(payment);
+        }
 
         Payment payment = paymentMapper.toEntity(paymentCreateRequestDto);
         payment.assignUser(userService.getEntity(userId));
