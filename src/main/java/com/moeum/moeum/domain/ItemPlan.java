@@ -41,8 +41,15 @@ public class ItemPlan {
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "itemPlan")
     private List<Item> itemList = new ArrayList<>();
+
+    public void reflectItem(Item item) {
+        this.amount = item.getAmount();
+        this.memo = item.getMemo();
+        this.category = item.getCategory();
+        this.payment = item.getPayment();
+    }
 
     public void addItem(Item item) {
         this.itemList.add(item);
