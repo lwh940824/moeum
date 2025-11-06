@@ -36,8 +36,18 @@ public class ItemPlanService {
     public ItemPlanResponseDto create(Long userId, ItemPlanCreateRequestDto itemPlanRequestDto) {
         Item item = itemService.getEntity(userId, itemPlanRequestDto.itemId());
 
-        ItemPlan itemPlan = itemPlanMapper.toEntity(itemPlanRequestDto);
-        item.addItemPlan(itemPlan);
+//        ItemPlan itemPlan = itemPlanMapper.toEntity(itemPlanRequestDto);
+//        itemPlan.addItem(item);
+
+        ItemPlan.builder()
+                .recurringType(itemPlanRequestDto.recurringType())
+                .recurringStartDate(itemPlanRequestDto.recurringStartDate())
+                .recurringEndDate(itemPlanRequestDto.recurringEndDate())
+                .amount(item.getAmount())
+                .memo(item.getMemo())
+                .category(item.getCategory())
+                .payment(item.getPayment())
+                .build();
 
         return itemPlanMapper.toDto(itemPlan);
     }

@@ -44,19 +44,23 @@ public class ItemPlan {
     @OneToMany(mappedBy = "item")
     private List<Item> itemList = new ArrayList<>();
 
-    public void updateItem() {
-
-    }
-
     public void addItem(Item item) {
         this.itemList.add(item);
         item.assignItemPlan(this);
     }
 
+    public void removeItem(Item item) {
+        this.itemList.remove(item);
+    }
+
     @Builder
-    public ItemPlan(RecurringType recurringType, LocalDateTime recurringStartDate, LocalDateTime recurringEndDate) {
+    public ItemPlan(RecurringType recurringType, LocalDateTime recurringStartDate, LocalDateTime recurringEndDate, Long amount, String memo, Category category, Payment payment) {
         this.recurringType = recurringType;
         this.recurringStartDate = recurringStartDate;
         this.recurringEndDate = recurringEndDate;
+        this.amount = amount;
+        this.memo = memo;
+        this.category = category;
+        this.payment = payment;
     }
 }
