@@ -41,7 +41,7 @@ public class ItemController {
                 .body(itemService.create(userDetails.getId(), itemCreateRequestDto));
     }
 
-    @PutMapping("/{itemId}")
+    @PatchMapping("/{itemId}")
     public ResponseEntity<ItemResponseDto> updateItem(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable Long itemId,
