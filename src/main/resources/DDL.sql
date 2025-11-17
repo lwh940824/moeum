@@ -40,7 +40,7 @@ CREATE TABLE `ledger_payment` (
 -- 카테고리
 CREATE TABLE `ledger_category` (
                                    `id`  BIGINT NOT NULL AUTO_INCREMENT COMMENT '카테고리 아이디',
-                                   `group_id`    BIGINT NULL  COMMENT '카테고리 그룹 아이디',
+                                   `parent_category_id`    BIGINT NULL  COMMENT '카테고리 그룹 아이디',
                                    `user_id`      BIGINT NOT NULL COMMENT '사용자 아이디',
                                    `name`         VARCHAR(50)  NULL COMMENT '카테고리 소분류 이름',
                                    `investment_yn` VARCHAR(1)   NOT NULL DEFAULT 'N' COMMENT '자산계획 사용여부 (Y/N)',
