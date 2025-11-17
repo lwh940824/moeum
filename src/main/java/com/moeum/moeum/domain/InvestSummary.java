@@ -27,13 +27,6 @@ public class InvestSummary extends BaseEntity {
     @JoinColumn(name = "invest_setting_id")
     private InvestSetting investSetting;
 
-    @Builder
-    public InvestSummary(Integer year, Integer month, Long principal) {
-        this.year = year;
-        this.month = month;
-        this.principal = principal;
-    }
-
     public void changeInvestSetting(InvestSetting investSetting) {
         if (investSetting == null) return;
         this.investSetting = investSetting;
@@ -42,5 +35,12 @@ public class InvestSummary extends BaseEntity {
     public void addPrincipal(Long principal) {
         if (principal == null) return;
         this.principal += principal;
+    }
+
+    @Builder
+    public InvestSummary(Integer year, Integer month, Long principal) {
+        this.year = year;
+        this.month = month;
+        this.principal = principal;
     }
 }

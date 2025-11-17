@@ -1,8 +1,6 @@
 package com.moeum.moeum.api.ledger.itemPlan.repository;
 
-import com.moeum.moeum.domain.ItemPlan;
-import com.moeum.moeum.domain.QItem;
-import com.moeum.moeum.domain.QItemPlan;
+import com.moeum.moeum.domain.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +16,15 @@ public class ItemPlanQueryRepositoryImpl implements ItemPlanQueryRepository {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
     private final QItemPlan itemPlan = QItemPlan.itemPlan;
+    private final QCategory category = QCategory.category;
+    private final QPayment payment = QPayment.payment;
 
     @Override
     public List<ItemPlan> findAllByUserId(Long userId) {
         return queryFactory
                 .selectFrom(itemPlan)
-                .join(itemPlan.item, QItem.item).fetchJoin()
                 .where(
-                        itemPlan.item.user.id.eq(userId)
+                        itemPlan.user.id.eq(userId)
                 ).fetch();
     }
 
@@ -33,9 +32,10 @@ public class ItemPlanQueryRepositoryImpl implements ItemPlanQueryRepository {
     public Optional<ItemPlan> findByUserIdAndId(Long userId, Long itemPlanId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(itemPlan)
-                .join(itemPlan.item, QItem.item).fetchJoin()
+                        .join(itemPlan.category, category).fetchJoin()
+                        .join(itemPlan.payment, payment).fetchJoin()
                 .where(
-                        itemPlan.id.eq(itemPlanId).and(itemPlan.item.user.id.eq(userId))
+                        itemPlan.id.eq(itemPlanId).and(itemPlan.user.id.eq(userId))
                 ).fetchOne());
     }
 }

@@ -46,4 +46,13 @@ public class ItemPlanController {
         ItemPlanResponseDto itemPlanResponseDto = itemPlanService.create(userDetails.getId(), itemPlanCreateRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(itemPlanResponseDto);
     }
+
+    @DeleteMapping("/{itemPlanId}")
+    public ResponseEntity<Void> deleteItemPlan(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long itemPlanId
+    ) {
+        itemPlanService.delete(userDetails.getId(), itemPlanId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -42,8 +42,14 @@ public enum ErrorCode {
 
     // Zip 관련 에러
     UNZIP_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ZIP파일 작업중 문제가 발생했습니다."),
-    FILE_UPLOAD_TYPE_ERROR(HttpStatus.BAD_REQUEST, "아이콘 이미지만 업로드 가능합니다.");
+    FILE_UPLOAD_TYPE_ERROR(HttpStatus.BAD_REQUEST, "아이콘 이미지만 업로드 가능합니다."),
 
+    // 날짜 관련 에러
+    INVALID_DATE_RANGE(HttpStatus.BAD_REQUEST, "시작 날짜가 종료 날짜보다 늦을 수 없습니다."),
+
+    // 공통
+    INVALID_AMOUNT(HttpStatus.BAD_REQUEST, "금액은 0 보다 작을수 없습니다.")
+    ;
 
     private final HttpStatus status;
     private final String message;
