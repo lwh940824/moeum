@@ -40,8 +40,11 @@ public class Category extends BaseEntity {
     private List<Item> itemList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
+
+    @OneToMany(mappedBy = "childCategory")
+    private List<Category> childCategoryList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -54,7 +57,15 @@ public class Category extends BaseEntity {
     }
 
     public void changeParentCategory(Category parentCategory) {
+        if (this.parentCategory != null) {
+            this.parentCategory.childCategoryList.remove(this);
+        }
+
         this.parentCategory = parentCategory;
+
+        if (parentCategory != null) {
+            parentCategory.childCategoryList.add(this);
+        }
     }
 
     public void deactivate(YnType useYn) {
@@ -66,7 +77,7 @@ public class Category extends BaseEntity {
     }
 
     @Builder
-    public Category(String name, CategoryType categoryType, String imageUrl, YnType investmentYn, List<Category> categoryList, YnType useYn, User user) {
+    public Category(String name, CategoryType categoryType, String imageUrl, YnType investmentYn, YnType useYn, User user) {
         this.name = name;
         this.categoryType = categoryType;
         this.imageUrl = imageUrl;

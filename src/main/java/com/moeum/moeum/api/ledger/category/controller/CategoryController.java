@@ -31,7 +31,7 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryResponseDto> getCategory(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long categoryId) {
-        return ResponseEntity.ok(categoryService.findById(userDetails.getId(), categoryId));
+        return ResponseEntity.ok(categoryService.getCategory(userDetails.getId(), categoryId));
     }
 
     @PostMapping

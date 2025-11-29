@@ -16,7 +16,7 @@ import java.util.List;
 
 @Tag(name = "아이템")
 @RestController
-@RequestMapping("/api/item")
+@RequestMapping("/api/item-plan")
 @RequiredArgsConstructor
 public class ItemPlanController {
 

@@ -27,7 +27,7 @@ public class CategoryService {
 
     // 카테고리 플랫형
     @Transactional
-    public List<CategoryResponseDto> getCategory(Long userId, Long categoryId) {
+    public List<CategoryResponseDto> getCategoryList(Long userId, Long categoryId) {
         Category category = getEntity(userId, categoryId);
         return null;
     }
@@ -61,12 +61,10 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CategoryResponseDto findById(Long userId, Long categoryId) {
+    public CategoryResponseDto getCategory(Long userId, Long categoryId) {
         return categoryMapper.toDto(getEntity(userId, categoryId));
     }
 
-
-    //TODO: 부모 카테고리는 ITEM 생성 불가(자식이 없는 경우는 가능)
     @Transactional
     public CategoryResponseDto create(Long userId, CategoryCreateRequestDto categoryCreateRequestDto) {
         categoryRepository.findByUserIdAndName(userId, categoryCreateRequestDto.name())
@@ -75,8 +73,13 @@ public class CategoryService {
         Category category = categoryMapper.toEntity(categoryCreateRequestDto);
         category.assignUser(userService.getEntity(userId));
 
-        if (categoryCreateRequestDto.groupId() != null) {
-            Category categoryGroup = getEntity(userId, categoryCreateRequestDto.groupId());
+        if (categoryCreateRequestDto.parentCategoryId() != null) {
+            Category categoryGroup = getEntity(userId, categoryCreateRequestDto.parentCategoryId());
+
+            if (categoryGroup.getParentCategory() != null) {
+                throw new CustomException(ErrorCode.EXISTS_CATEGORY_GROUP);
+            }
+
             category.changeParentCategory(categoryGroup);
         }
 
@@ -99,7 +102,10 @@ public class CategoryService {
             Category categoryGroup = getEntity(userId, categoryUpdateRequestDto.groupId());
 
             // 자기 자신 설정 금지
-            if (categoryGroup.getId().equals(categoryUpdateRequestDto.groupId())) throw new CustomException(ErrorCode.CATEGORY_ERROR);
+            if (
+                    categoryGroup.getId().equals(category.getId())
+                    || categoryGroup.getParentCategory() != null
+            ) throw new CustomException(ErrorCode.CATEGORY_ERROR);
 
             category.changeParentCategory(categoryGroup);
         }

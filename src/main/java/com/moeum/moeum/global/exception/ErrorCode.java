@@ -20,6 +20,7 @@ public enum ErrorCode {
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다."),
     REQUIRED_CATEGORY(HttpStatus.BAD_REQUEST, "카테고리는 필수입니다."),
     CATEGORY_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카테고리 관련 작업중 오류 발생"),
+    EXISTS_CATEGORY_GROUP(HttpStatus.CONFLICT, "이미 상위 카테고리를 가진 카테고리입니다."),
 
     // 아이템
     NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "존재하지 않는 아이템입니다."),

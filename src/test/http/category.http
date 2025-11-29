@@ -13,7 +13,8 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "적금",
+  "parentCategoryId": 1,
+  "name": "청년도약계좌",
   "categoryType": "INCOME",
   "imageUrl": "1",
   "investmentYn": "N",
@@ -22,7 +23,7 @@ Content-Type: application/json
 
 ### 카테고리 수정
 PUT {{host}}/api/category/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZUBsb2NhbC50ZXN0IiwibmFtZSI6Im1lQGxvY2FsLnRlc3QiLCJpYXQiOjE3NTY2MzA0MDYsImV4cCI6MTc1ODc3Nzg5MH0.bDCbtFlydTTVnuw0Col-GXZ6gY46WZ1wbD1PiDBh_HI
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -30,5 +31,13 @@ Content-Type: application/json
   "categoryType": "EXPENSE",
   "imageUrl": "1"
 }
+
+### 카테고리 리스트 조회
+
+
+### 카테고리 단건 조회
+GET {{host}}/api/category/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
 
 ### 카테고리 사용여부 변경
