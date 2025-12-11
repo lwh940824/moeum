@@ -5,6 +5,9 @@ import com.moeum.moeum.type.YnType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
@@ -25,7 +28,14 @@ public class Payment extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YnType useYn;
+    private YnType useYn = YnType.Y;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_payment_id")
+    private Payment parentPayment;
+
+    @OneToMany(mappedBy = "parentPayment")
+    private List<Payment> childPaymentList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -34,6 +44,18 @@ public class Payment extends BaseEntity {
     public void update(String name, PaymentType paymentType) {
         this.name = name;
         this.paymentType = paymentType;
+    }
+
+    public void changeParentPayment(Payment parentPayment) {
+        if (this.parentPayment != null) {
+            this.parentPayment.childPaymentList.remove(this);
+        }
+
+        this.parentPayment = parentPayment;
+
+        if (parentPayment != null) {
+            this.parentPayment.childPaymentList.add(this);
+        }
     }
 
     public void changeUseYn(YnType useYn) {
@@ -45,7 +67,7 @@ public class Payment extends BaseEntity {
     }
 
     @Builder
-    public Payment(Long paymentId, String name, PaymentType paymentType, User user) {
+    public Payment(String name, PaymentType paymentType, User user) {
         this.name = name;
         this.paymentType = paymentType;
         this.user = user;

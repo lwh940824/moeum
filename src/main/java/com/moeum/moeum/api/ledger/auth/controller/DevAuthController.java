@@ -2,6 +2,7 @@ package com.moeum.moeum.api.ledger.auth.controller;
 
 import com.moeum.moeum.api.ledger.auth.dto.JwtResponseDto;
 import com.moeum.moeum.api.ledger.user.repository.UserRepository;
+import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.User;
 import com.moeum.moeum.global.security.JwtTokenProvider;
 import com.moeum.moeum.type.RoleType;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class DevAuthController {
 
     private final UserRepository userRepository;
+    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
     // POST /api/auth/dev-token?email=you@example.com&name=You
@@ -23,7 +25,7 @@ public class DevAuthController {
     public JwtResponseDto issue(@RequestParam String email,
                                 @RequestParam(defaultValue = "Dev User") String name) {
         User user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(
+                .orElseGet(() -> userService.createUser(
                         User.builder().email(email).name(name).roleType(RoleType.ROLE_USER).build()
                 ));
         return new JwtResponseDto(jwtTokenProvider.createToken(user));

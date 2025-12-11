@@ -13,10 +13,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "categoryId": 2,
+  "categoryId": 5,
   "paymentId": 3,
   "amount": 1000,
-  "occurredAt": "2025-10-08T14:30:00",
+  "occurredAt": "2025-01-08T14:30:00",
   "memo": "메모"
 }
 

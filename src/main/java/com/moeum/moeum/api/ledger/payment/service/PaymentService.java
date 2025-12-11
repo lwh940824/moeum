@@ -6,10 +6,11 @@ import com.moeum.moeum.api.ledger.payment.dto.PaymentUpdateRequestDto;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentUseYnPatchRequestDto;
 import com.moeum.moeum.api.ledger.payment.mapper.PaymentMapper;
 import com.moeum.moeum.api.ledger.payment.repository.PaymentRepository;
-import com.moeum.moeum.api.ledger.user.service.UserService;
+import com.moeum.moeum.api.ledger.user.repository.UserRepository;
 import com.moeum.moeum.domain.Payment;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
+import com.moeum.moeum.type.PaymentType;
 import com.moeum.moeum.type.YnType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ public class PaymentService {
 
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public List<PaymentResponseDto> findAllByUserId(Long userId) {
@@ -52,7 +54,16 @@ public class PaymentService {
         }
 
         Payment payment = paymentMapper.toEntity(paymentCreateRequestDto);
-        payment.assignUser(userService.getEntity(userId));
+        payment.assignUser(userRepository.getReferenceById(userId));
+
+        if (paymentCreateRequestDto.parentPaymentId() != null) {
+            Payment parentPayment = getEntity(userId, paymentCreateRequestDto.parentPaymentId());
+
+            if (parentPayment.getParentPayment() != null) {
+                throw new CustomException(ErrorCode.EXISTS_CATEGORY);
+            }
+            payment.changeParentPayment(parentPayment);payment.changeParentPayment(parentPayment);
+        }
 
         paymentRepository.save(payment);
 
@@ -81,6 +92,10 @@ public class PaymentService {
         if (!payment.getUseYn().equals(paymentUseYnPatchRequestDto.useYn())) {
             payment.changeUseYn(paymentUseYnPatchRequestDto.useYn());
         }
+    }
+
+    public boolean isBasePayment(Payment payment) {
+        return Arrays.stream(PaymentType.values()).findAny().isPresent();
     }
 
     public Payment getEntity(Long userId, Long paymentId) {

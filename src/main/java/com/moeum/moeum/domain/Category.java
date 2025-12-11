@@ -43,7 +43,7 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
 
-    @OneToMany(mappedBy = "childCategory")
+    @OneToMany(mappedBy = "parentCategory")
     private List<Category> childCategoryList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

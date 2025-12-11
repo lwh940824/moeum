@@ -2,6 +2,7 @@ package com.moeum.moeum.api.ledger.auth.service;
 
 import com.moeum.moeum.api.ledger.auth.dto.JwtResponseDto;
 import com.moeum.moeum.api.ledger.user.repository.UserRepository;
+import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.User;
 import com.moeum.moeum.global.security.JwtTokenProvider;
 import com.moeum.moeum.type.RoleType;
@@ -19,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Value("${google.oauth2.client-id}")
@@ -70,8 +71,8 @@ public class AuthService {
         String email = (String) userInfo.get("email");
         String name = (String) userInfo.get("name");
 
-        User user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(User.builder().email(email).name(name).roleType(RoleType.ROLE_USER).build()));
+        User user = userService.findUserByEmail(email)
+                .orElseGet(() -> userService.createUser(User.builder().email(email).name(name).roleType(RoleType.ROLE_USER).build()));
 
         String jwt = jwtTokenProvider.createToken(user);
         return new JwtResponseDto(jwt);
