@@ -25,18 +25,18 @@ public class PaymentController {
 
     @GetMapping
     public ResponseEntity<List<PaymentResponseDto>> getPaymentList(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseEntity.ok(paymentService.findAllByUserId(userDetails.getId()));
+        return ResponseEntity.ok(paymentService.getPaymentList(userDetails.getId()));
     }
 
     @GetMapping("/{paymentId}")
     public ResponseEntity<PaymentResponseDto> getPayment(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable Long paymentId) {
-        return ResponseEntity.ok(paymentService.findByUserIdAndId(userDetails.getId(), paymentId));
+        return ResponseEntity.ok(paymentService.getPayment(userDetails.getId(), paymentId));
     }
 
     @PostMapping
-    public ResponseEntity<PaymentResponseDto> create(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<PaymentResponseDto> postPayment(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                      @RequestBody PaymentCreateRequestDto paymentCreateRequestDto) {
         PaymentResponseDto paymentResponseDto = paymentService.create(userDetails.getId(), paymentCreateRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -45,7 +45,7 @@ public class PaymentController {
     }
 
     @PutMapping("/{paymentId}")
-    public ResponseEntity<PaymentResponseDto> update(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<PaymentResponseDto> updatePayment(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                      @PathVariable Long paymentId,
                                                      @RequestBody PaymentUpdateRequestDto paymentUpdateRequestDto) {
         return ResponseEntity.ok(paymentService.update(userDetails.getId(), paymentId, paymentUpdateRequestDto));

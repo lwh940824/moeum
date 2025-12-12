@@ -30,6 +30,7 @@ public enum ErrorCode {
     NOT_FOUND_PAYMENT(HttpStatus.NOT_FOUND, "존재하지 않는 결제수단입니다."),
     REQUIRED_PAYMENT(HttpStatus.BAD_REQUEST, "결제수단은 필수입니다."),
     EXISTS_PAYMENT_GROUP(HttpStatus.CONFLICT, "이미 상위 카테고리를 가진 결제수단입니다."),
+    BASE_PAYMENT(HttpStatus.CONFLICT, "기본 결제수단은 수정할수 없습니다."),
 
     // 집계 설정
     EXISTS_INVEST_SETTING(HttpStatus.CONFLICT, "이미 존재하는 집계 설정입니다."),

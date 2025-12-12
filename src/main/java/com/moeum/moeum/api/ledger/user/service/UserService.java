@@ -40,15 +40,15 @@ public class UserService {
         User saveUser = userRepository.save(user);
 
         //  초기 결제수단 데이터 생성
-        Arrays.stream(PaymentType.values()).forEach(paymentType -> {
+        for (PaymentType paymentType : PaymentType.values()) {
             paymentService.create(
-                    saveUser.getId()
-                    , PaymentCreateRequestDto.builder()
-                                    .parentPaymentId(null)
-                                    .name(paymentType.name())
-                                    .paymentType(paymentType)
-                    .build());
-        });
+                    saveUser.getId(),
+                    PaymentCreateRequestDto.builder()
+                            .parentPaymentId(null)
+                            .name(paymentType.getLabel())
+                            .paymentType(paymentType)
+                            .build());
+        }
 
         return saveUser;
     }
