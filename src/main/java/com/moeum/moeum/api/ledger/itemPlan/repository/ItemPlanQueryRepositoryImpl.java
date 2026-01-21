@@ -1,6 +1,9 @@
 package com.moeum.moeum.api.ledger.itemPlan.repository;
 
-import com.moeum.moeum.domain.*;
+import com.moeum.moeum.domain.ItemPlan;
+import com.moeum.moeum.domain.QCategory;
+import com.moeum.moeum.domain.QItemPlan;
+import com.moeum.moeum.domain.QPayment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

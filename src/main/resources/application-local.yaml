@@ -1,2 +1,17 @@
+
+
+oauth:
+  google:
+    client-id: 492084429766-r353f0mr11lsflk23q2mgl6578cl4lod.apps.googleusercontent.com
+    client-secret: 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
+    redirect-uri: http://localhost:7070/oauth2/callback
+
 jwt:
-  expire: 2147483647
+  secret: p7hfZCh+0MYRtdv35xWcFhxQiMZ3vbdc5bc+lc0pdaM=
+  expire: 3600000
+
+minio:
+  url: http://localhost:9000
+  access-key: moeum
+  secret-key: moeum7192
+  bucket: moeum

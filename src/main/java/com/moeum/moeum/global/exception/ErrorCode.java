@@ -9,7 +9,10 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "유효하지 않은 요청 값 입니다."),
 
+    // 인증
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
+    NOT_SUPPORT_LOGIN(HttpStatus.BAD_REQUEST, "지원하지 않는 로그인 방식입니다."),
+    INVALID_LOGIN(HttpStatus.BAD_REQUEST, "유효하지 않은 로그인입니다."),
 
 //    EXISTS_CATEGORY(HttpStatus.CONFLICT, "이미 존재하는 카테고리 입니다."),
 //    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다."),

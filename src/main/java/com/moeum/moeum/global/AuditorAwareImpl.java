@@ -1,6 +1,5 @@
 package com.moeum.moeum.global;
 
-import jakarta.annotation.Nullable;
 import lombok.NonNull;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

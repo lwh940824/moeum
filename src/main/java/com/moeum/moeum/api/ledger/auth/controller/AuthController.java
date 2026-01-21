@@ -2,6 +2,7 @@ package com.moeum.moeum.api.ledger.auth.controller;
 
 import com.moeum.moeum.api.ledger.auth.dto.GoogleLoginRequestDto;
 import com.moeum.moeum.api.ledger.auth.dto.JwtResponseDto;
+import com.moeum.moeum.api.ledger.auth.dto.LoginRequestDto;
 import com.moeum.moeum.api.ledger.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,13 @@ public class AuthController {
 
     @PostMapping("/google-login")
     public ResponseEntity<JwtResponseDto> googleLogin(@RequestBody GoogleLoginRequestDto googleLoginRequestDto) {
-        JwtResponseDto jwtResponse = authService.loginWithGoogle(googleLoginRequestDto.code());
+        JwtResponseDto jwtResponse = authService.loginWithGoogle(googleLoginRequestDto);
+        return ResponseEntity.ok(jwtResponse);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        JwtResponseDto jwtResponse = authService.login(loginRequestDto);
         return ResponseEntity.ok(jwtResponse);
     }
 }

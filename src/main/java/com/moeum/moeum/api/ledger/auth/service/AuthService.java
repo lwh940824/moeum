@@ -1,7 +1,9 @@
 package com.moeum.moeum.api.ledger.auth.service;
 
+import com.moeum.moeum.api.ledger.auth.dto.GoogleLoginRequestDto;
 import com.moeum.moeum.api.ledger.auth.dto.JwtResponseDto;
-import com.moeum.moeum.api.ledger.user.repository.UserRepository;
+import com.moeum.moeum.api.ledger.auth.dto.LoginRequestDto;
+import com.moeum.moeum.api.ledger.auth.service.social.LoginStrategy;
 import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.User;
 import com.moeum.moeum.global.security.JwtTokenProvider;
@@ -20,25 +22,27 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final LoginStrategy loginStrategy;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Value("${google.oauth2.client-id}")
+    @Value("${oauth.google.client-id}")
     private String clientId;
 
-    @Value("${google.oauth2.client-secret}")
+    @Value("${oauth.google.client-secret}")
     private String clientSecret;
 
-    @Value("${google.oauth2.redirect-uri}")
+    @Value("${oauth.google.redirect-uri}")
     private String redirectUri;
 
-    public JwtResponseDto loginWithGoogle(String code) {
+    public JwtResponseDto loginWithGoogle(GoogleLoginRequestDto googleLoginRequestDto) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("code", code);
+        params.add("code", googleLoginRequestDto.code());
+        params.add("code_verifier", googleLoginRequestDto.codeVerifier());
         params.add("client_id", clientId);
         params.add("client_secret", clientSecret);
         params.add("redirect_uri", redirectUri);
@@ -75,6 +79,22 @@ public class AuthService {
                 .orElseGet(() -> userService.createUser(User.builder().email(email).name(name).roleType(RoleType.ROLE_USER).build()));
 
         String jwt = jwtTokenProvider.createToken(user);
+        return new JwtResponseDto(jwt);
+    }
+
+    public JwtResponseDto login(LoginRequestDto loginRequestDto) {
+        User user = loginStrategy.authenticate(loginRequestDto);
+
+        User findUser = userService.findUserByEmail(user.getEmail())
+                .orElseGet(() -> userService.createUser(
+                        User.builder()
+                                .name(user.getName())
+                                .roleType(user.getRoleType())
+                                .email(user.getEmail())
+                                .provider(user.getProvider())
+                                .build()));
+
+        String jwt = jwtTokenProvider.createToken(findUser);
         return new JwtResponseDto(jwt);
     }
 }
