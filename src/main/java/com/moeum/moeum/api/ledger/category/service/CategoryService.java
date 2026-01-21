@@ -99,6 +99,7 @@ public class CategoryService {
                 categoryUpdateRequestDto.imageUrl()
         );
 
+        // 상위 카테고리 설정
         if (categoryUpdateRequestDto.groupId() == null) {
             category.changeParentCategory(null);
         } else {

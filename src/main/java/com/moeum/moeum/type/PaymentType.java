@@ -9,4 +9,8 @@ public enum PaymentType {
     private final String paymentType;
 
     PaymentType(String paymentType) {this.paymentType = paymentType;}
+
+    public String getLabel() {
+        return paymentType;
+    }
 }

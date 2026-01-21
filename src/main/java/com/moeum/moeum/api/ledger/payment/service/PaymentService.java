@@ -31,14 +31,14 @@ public class PaymentService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<PaymentResponseDto> findAllByUserId(Long userId) {
+    public List<PaymentResponseDto> getPaymentList(Long userId) {
         return paymentRepository.findAllByUserId(userId).stream()
                 .map(paymentMapper::toDto)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public PaymentResponseDto findByUserIdAndId(Long userId, Long paymentId) {
+    public PaymentResponseDto getPayment(Long userId, Long paymentId) {
         return paymentMapper.toDto(getEntity(userId, paymentId));
     }
 
@@ -46,7 +46,7 @@ public class PaymentService {
     public PaymentResponseDto create(Long userId, PaymentCreateRequestDto paymentCreateRequestDto) {
         Optional<Payment> existPayment = paymentRepository.findByUserIdAndName(userId, paymentCreateRequestDto.name());
 
-        // 이미 생성되었던 결제수단이라면 사용 활성화만
+        // 이미 생성됐던 결제수단이라면 사용 활성화만
         if (existPayment.isPresent()) {
             Payment payment = existPayment.get();
             payment.changeUseYn(YnType.Y);
@@ -56,13 +56,15 @@ public class PaymentService {
         Payment payment = paymentMapper.toEntity(paymentCreateRequestDto);
         payment.assignUser(userRepository.getReferenceById(userId));
 
+        // 상위 결제수단 설정
         if (paymentCreateRequestDto.parentPaymentId() != null) {
             Payment parentPayment = getEntity(userId, paymentCreateRequestDto.parentPaymentId());
 
             if (parentPayment.getParentPayment() != null) {
-                throw new CustomException(ErrorCode.EXISTS_CATEGORY);
+                throw new CustomException(ErrorCode.EXISTS_PAYMENT_GROUP);
             }
-            payment.changeParentPayment(parentPayment);payment.changeParentPayment(parentPayment);
+
+            payment.changeParentPayment(parentPayment);
         }
 
         paymentRepository.save(payment);
@@ -74,9 +76,29 @@ public class PaymentService {
     public PaymentResponseDto update(Long userId, Long paymentId, PaymentUpdateRequestDto paymentUpdateRequestDto) {
         Payment payment = getEntity(userId, paymentId);
 
+        // 사용자가 이미 등록한 결제수단
         if (!payment.getName().equals(paymentUpdateRequestDto.name())) {
             paymentRepository.findByUserIdAndName(userId, paymentUpdateRequestDto.name())
                     .ifPresent(entity -> {throw new CustomException(ErrorCode.EXISTS_PAYMENT);});
+        }
+
+        // 기본 결제수단 수정 요청시
+        if (isBasePayment(payment)) {
+            throw new CustomException(ErrorCode.BASE_PAYMENT);
+        }
+
+        // 상위 결제수단 설정
+        if (paymentUpdateRequestDto.parentPaymentId() == null) {
+            payment.changeParentPayment(null);
+        } else {
+            Payment parentPayment = getEntity(userId, paymentUpdateRequestDto.parentPaymentId());
+
+            // 자기 자신 설정 금지
+            if (parentPayment.getParentPayment() != null || parentPayment.getId().equals(payment.getId())) {
+                throw new CustomException(ErrorCode.EXISTS_PAYMENT_GROUP);
+            }
+
+            payment.changeParentPayment(parentPayment);
         }
 
         payment.update(paymentUpdateRequestDto.name(), paymentUpdateRequestDto.paymentType());
@@ -95,11 +117,11 @@ public class PaymentService {
     }
 
     public boolean isBasePayment(Payment payment) {
-        return Arrays.stream(PaymentType.values()).findAny().isPresent();
+        return Arrays.stream(PaymentType.values()).anyMatch(paymentType -> paymentType.getLabel().equals(payment.getName()));
     }
 
     public Payment getEntity(Long userId, Long paymentId) {
         return paymentRepository.findByUserIdAndId(userId, paymentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PAYMENT));
     }
 }

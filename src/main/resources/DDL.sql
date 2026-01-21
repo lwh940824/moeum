@@ -21,6 +21,7 @@ CREATE TABLE `user` (
 -- 결제수단
 CREATE TABLE `ledger_payment` (
                                   `id`   BIGINT NOT NULL AUTO_INCREMENT COMMENT '결제수단 아이디',
+                                  `parent_payment_id`    BIGINT NULL  COMMENT '결제수단 그룹 아이디',
                                   `user_id`      BIGINT NOT NULL COMMENT '사용자 아이디',
                                   `name`         VARCHAR(100) NULL COMMENT '결제수단 이름',
                                   `payment_type` VARCHAR(10)  NULL COMMENT '결제수단 타입',

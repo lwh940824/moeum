@@ -13,17 +13,19 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
+  "parentPaymentId": 7,
   "name": "월급통장",
   "paymentType": "ATM"
 }
 
 ### 결제수단 수정
-PUT {{host}}/api/payment/3
+PUT {{host}}/api/payment/7
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "월급통장",
+  "parentPaymentId": 6,
+  "name": "체크카드",
   "paymentType": "ATM"
 }
 
@@ -35,3 +37,14 @@ Content-Type: application/json
 {
   "useYn": "N"
 }
+
+
+### 결제수단 리스트 조회
+GET {{host}}/api/payment
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### 결제수단 단건 조회
+GET {{host}}/api/payment/7
+Authorization: Bearer {{token}}
+Content-Type: application/json
