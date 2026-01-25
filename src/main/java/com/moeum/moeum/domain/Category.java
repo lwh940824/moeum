@@ -31,10 +31,10 @@ public class Category extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private YnType investmentYn;
+    private YnType investmentYn = YnType.N;
 
     @Enumerated(EnumType.STRING)
-    private YnType useYn;
+    private YnType useYn = YnType.Y;
 
     @OneToMany(mappedBy = "category")
     private List<Item> itemList = new ArrayList<>();
@@ -81,8 +81,6 @@ public class Category extends BaseEntity {
         this.name = name;
         this.categoryType = categoryType;
         this.imageUrl = imageUrl;
-        this.investmentYn = investmentYn;
-        this.useYn = useYn;
         this.user = user;
     }
 }
