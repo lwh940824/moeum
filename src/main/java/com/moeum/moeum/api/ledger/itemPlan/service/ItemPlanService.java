@@ -10,12 +10,16 @@ import com.moeum.moeum.api.ledger.itemPlan.repository.ItemPlanRepository;
 import com.moeum.moeum.api.ledger.payment.service.PaymentService;
 import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.*;
+import com.moeum.moeum.type.RecurringType;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.List;
 
 @Service
@@ -53,6 +57,10 @@ public class ItemPlanService {
 
         itemPlanRepository.save(itemPlan);
 
+        if (itemPlan.getRecurringStartDate().isBefore(LocalDate.now())) {
+            createPastItems(itemPlan);
+        }
+
         return itemPlanMapper.toDto(itemPlan);
     }
 
@@ -85,5 +93,36 @@ public class ItemPlanService {
     public ItemPlan getEntity(Long userId, Long itemPlanId) {
         return itemPlanRepository.findByUserIdAndId(userId, itemPlanId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ITEM_PLAN));
+    }
+
+    private void createPastItems(ItemPlan itemPlan) {
+        LocalDate today = LocalDate.now();
+        LocalDate endDate = itemPlan.getRecurringEndDate();
+        LocalDate startDate = itemPlan.getRecurringStartDate();
+        LocalDate limitDay = endDate.isBefore(today) ? endDate : today;
+
+        if (startDate.isAfter(limitDay)) {
+            return;
+        }
+
+        Set<LocalDate> existingOccurredAt = itemPlan.getItemList().stream()
+                .map(item -> item.getOccurredAt().toLocalDate())
+                .collect(Collectors.toSet());
+
+        LocalDate cursor = startDate;
+        while (!cursor.isAfter(limitDay)) {
+            if (!existingOccurredAt.contains(cursor)) {
+                itemService.createFromItemPlan(itemPlan, cursor.atStartOfDay());
+            }
+            cursor = nextOccurrence(cursor, itemPlan.getRecurringType());
+        }
+    }
+
+    private LocalDate nextOccurrence(LocalDate current, RecurringType recurringType) {
+        return switch (recurringType) {
+            case DAY -> current.plusDays(1);
+            case WEEK -> current.plusWeeks(1);
+            case MONTH -> current.plusMonths(1);
+        };
     }
 }

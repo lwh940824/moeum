@@ -16,6 +16,7 @@ import com.moeum.moeum.api.ledger.payment.service.PaymentService;
 import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.domain.Item;
+import com.moeum.moeum.domain.ItemPlan;
 import com.moeum.moeum.domain.Payment;
 import com.moeum.moeum.domain.User;
 import com.moeum.moeum.global.exception.CustomException;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -110,47 +112,32 @@ public class ItemService {
         Category category = categoryService.getEntity(userId, itemCreateRequestDto.categoryId());
         Payment payment = paymentService.getEntity(userId, itemCreateRequestDto.paymentId());
         User user = userService.getEntity(userId);
-        item.changeCategory(category);
-        item.changePayment(payment);
-        item.assignUser(user);
-        itemRepository.save(item);
-
-        investSettingRepository.findByUserIdAndCategoryId(userId, category.getId())
-                .ifPresent(investSetting ->
-                        investSummaryService.create(
-                                InvestSummaryCreateDto.builder().
-                                        investSettingId(investSetting.getId())
-                                        .year(item.getOccurredAt().getYear())
-                                        .month(item.getOccurredAt().getMonthValue())
-                                        .principal(item.getAmount())
-                                        .build()
-                        )
-                );
+        Item saved = createInternal(item, user, category, payment, null);
 
         ItemCategoryDto childCategoryDto = ItemCategoryDto.builder()
-                .categoryId(item.getCategory().getId())
-                .name(item.getCategory().getName())
-                .imageUrl(item.getCategory().getImageUrl())
+                .categoryId(saved.getCategory().getId())
+                .name(saved.getCategory().getName())
+                .imageUrl(saved.getCategory().getImageUrl())
                 .build();
 
-        ItemCategoryDto parentCategoryDto = item.getCategory().getParentCategory() == null ? null :
+        ItemCategoryDto parentCategoryDto = saved.getCategory().getParentCategory() == null ? null :
                 ItemCategoryDto.builder()
-                        .categoryId(item.getCategory().getParentCategory().getId())
-                        .name(item.getCategory().getParentCategory().getName())
-                        .imageUrl(item.getCategory().getParentCategory().getImageUrl())
+                        .categoryId(saved.getCategory().getParentCategory().getId())
+                        .name(saved.getCategory().getParentCategory().getName())
+                        .imageUrl(saved.getCategory().getParentCategory().getImageUrl())
                         .build();
 
         return ItemResponseDto.builder()
-                .itemId(item.getId())
-                .amount(item.getAmount())
-                .occurredAt(item.getOccurredAt())
-                .memo(item.getMemo())
+                .itemId(saved.getId())
+                .amount(saved.getAmount())
+                .occurredAt(saved.getOccurredAt())
+                .memo(saved.getMemo())
                 .childCategory(childCategoryDto)
                 .parentCategory(parentCategoryDto)
                 .payment(ItemPaymentDto.builder()
-                        .paymentId(item.getPayment().getId())
-                        .name(item.getPayment().getName())
-                        .paymentType(item.getPayment().getPaymentType())
+                        .paymentId(saved.getPayment().getId())
+                        .name(saved.getPayment().getName())
+                        .paymentType(saved.getPayment().getPaymentType())
                         .build())
                 .build();
     }
@@ -224,7 +211,7 @@ public class ItemService {
         Item item = getEntity(userId, itemId);
 
         investSettingRepository.findByUserIdAndCategoryId(userId, item.getCategory().getId())
-                .ifPresent(investSetting -> {
+                .ifPresent(investSetting ->
                     investSummaryService.create(
                             InvestSummaryCreateDto.builder()
                                     .investSettingId(investSetting.getId())
@@ -232,8 +219,8 @@ public class ItemService {
                                     .month(item.getOccurredAt().getMonthValue())
                                     .principal(item.getAmount() * -1)
                                     .build()
-                    );
-                });
+                    )
+                );
 
         itemRepository.delete(item);
     }
@@ -246,5 +233,43 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Item getEntity(Long userId, Long itemId) {
         return itemRepository.findByUserIdAndId(userId, itemId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ITEM));
+    }
+
+    @Transactional
+    public Item createFromItemPlan(ItemPlan itemPlan, LocalDateTime occurredAt) {
+        Item item = Item.builder()
+                .amount(itemPlan.getAmount())
+                .occurredAt(occurredAt)
+                .memo(itemPlan.getMemo())
+                .build();
+
+        return createInternal(item, itemPlan.getUser(), itemPlan.getCategory(), itemPlan.getPayment(), itemPlan);
+    }
+
+    private Item createInternal(Item item, User user, Category category, Payment payment, ItemPlan itemPlan) {
+        item.changeCategory(category);
+        item.changePayment(payment);
+        item.assignUser(user);
+        if (itemPlan != null) {
+            itemPlan.addItem(item);
+        }
+
+        itemRepository.save(item);
+        applyInvestSummary(item);
+        return item;
+    }
+
+    private void applyInvestSummary(Item item) {
+        investSettingRepository.findByUserIdAndCategoryId(item.getUser().getId(), item.getCategory().getId())
+                .ifPresent(investSetting ->
+                        investSummaryService.create(
+                                InvestSummaryCreateDto.builder()
+                                        .investSettingId(investSetting.getId())
+                                        .year(item.getOccurredAt().getYear())
+                                        .month(item.getOccurredAt().getMonthValue())
+                                        .principal(item.getAmount())
+                                        .build()
+                        )
+                );
     }
 }

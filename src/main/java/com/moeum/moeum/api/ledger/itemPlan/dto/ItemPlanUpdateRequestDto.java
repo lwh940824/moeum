@@ -2,12 +2,12 @@ package com.moeum.moeum.api.ledger.itemPlan.dto;
 
 import com.moeum.moeum.type.RecurringType;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record ItemPlanUpdateRequestDto(
         RecurringType recurringType,
-        LocalDateTime recurringStartDate,
-        LocalDateTime recurringEndDate,
+        LocalDate recurringStartDate,
+        LocalDate recurringEndDate,
         Long amount,
         String memo,
         Long categoryId,

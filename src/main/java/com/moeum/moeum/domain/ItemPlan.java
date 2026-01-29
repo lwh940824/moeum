@@ -6,7 +6,7 @@ import com.moeum.moeum.type.RecurringType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +26,10 @@ public class ItemPlan {
     private RecurringType recurringType;
 
     @Column(nullable = false)
-    private LocalDateTime recurringStartDate;
+    private LocalDate recurringStartDate;
 
     @Column(nullable = false)
-    private LocalDateTime recurringEndDate;
+    private LocalDate recurringEndDate;
 
     private Long amount;
 
@@ -50,7 +50,7 @@ public class ItemPlan {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public void update(RecurringType recurringType, LocalDateTime recurringStartDate, LocalDateTime recurringEndDate, Long amount, String memo, Category category, Payment payment) {
+    public void update(RecurringType recurringType, LocalDate recurringStartDate, LocalDate recurringEndDate, Long amount, String memo, Category category, Payment payment) {
         this.recurringType = recurringType;
 
         if (recurringEndDate.isBefore(recurringStartDate)) {
@@ -109,7 +109,7 @@ public class ItemPlan {
     }
 
     @Builder
-    public ItemPlan(RecurringType recurringType, LocalDateTime recurringStartDate, LocalDateTime recurringEndDate, Long amount, String memo, Category category, Payment payment) {
+    public ItemPlan(RecurringType recurringType, LocalDate recurringStartDate, LocalDate recurringEndDate, Long amount, String memo, Category category, Payment payment) {
         this.recurringType = recurringType;
         this.recurringStartDate = recurringStartDate;
         this.recurringEndDate = recurringEndDate;

@@ -4,13 +4,13 @@ import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
 import com.moeum.moeum.api.ledger.payment.dto.PaymentResponseDto;
 import com.moeum.moeum.type.RecurringType;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record ItemPlanResponseDto(
         Long id,
         RecurringType recurringType,
-        LocalDateTime recurringStartDate,
-        LocalDateTime recurringEndDate,
+        LocalDate recurringStartDate,
+        LocalDate recurringEndDate,
         CategoryResponseDto categoryResponseDto,
         PaymentResponseDto paymentResponseDto
 ) {}
