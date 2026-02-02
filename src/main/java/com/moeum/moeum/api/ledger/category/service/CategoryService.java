@@ -4,13 +4,17 @@ import com.moeum.moeum.api.ledger.category.dto.CategoryChangeYnRequest;
 import com.moeum.moeum.api.ledger.category.dto.CategoryCreateRequestDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryResponseDto;
 import com.moeum.moeum.api.ledger.category.dto.CategoryUpdateRequestDto;
+import com.moeum.moeum.api.ledger.category.event.CategoryCreatedEvent;
 import com.moeum.moeum.api.ledger.category.mapper.CategoryMapper;
 import com.moeum.moeum.api.ledger.category.repository.CategoryRepository;
+import com.moeum.moeum.api.ledger.investSetting.dto.InvestSettingCreateDto;
+import com.moeum.moeum.api.ledger.investSetting.service.InvestSettingService;
 import com.moeum.moeum.api.ledger.user.service.UserService;
 import com.moeum.moeum.domain.Category;
 import com.moeum.moeum.global.exception.CustomException;
 import com.moeum.moeum.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,8 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
     private final UserService userService;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     // 카테고리 플랫형
     @Transactional
@@ -71,7 +77,9 @@ public class CategoryService {
     @Transactional
     public CategoryResponseDto create(Long userId, CategoryCreateRequestDto categoryCreateRequestDto) {
         categoryRepository.findByUserIdAndName(userId, categoryCreateRequestDto.name())
-                .ifPresent(category -> {throw new CustomException(ErrorCode.EXISTS_CATEGORY);});
+                .ifPresent(category -> {
+                    throw new CustomException(ErrorCode.EXISTS_CATEGORY);
+                });
 
         Category category = categoryMapper.toEntity(categoryCreateRequestDto);
         category.assignUser(userService.getEntity(userId));
@@ -86,7 +94,17 @@ public class CategoryService {
             category.changeParentCategory(categoryGroup);
         }
 
-        return categoryMapper.toDto(categoryRepository.save(category));
+        Category savedCategory = categoryRepository.save(category);
+
+        if ("Y".equals(categoryCreateRequestDto.investmentYn())) {
+            eventPublisher.publishEvent(CategoryCreatedEvent.builder()
+                    .userId(userId)
+                    .categoryId(savedCategory.getId())
+                    .build()
+            );
+        }
+
+        return categoryMapper.toDto(savedCategory);
     }
 
     @Transactional
@@ -108,7 +126,7 @@ public class CategoryService {
             // 자기 자신 설정 금지
             if (
                     categoryGroup.getId().equals(category.getId())
-                    || categoryGroup.getParentCategory() != null
+                            || categoryGroup.getParentCategory() != null
             ) throw new CustomException(ErrorCode.CATEGORY_ERROR);
 
             category.changeParentCategory(categoryGroup);

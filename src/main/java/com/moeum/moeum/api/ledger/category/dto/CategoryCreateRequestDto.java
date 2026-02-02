@@ -16,5 +16,7 @@ public record CategoryCreateRequestDto(
         CategoryType categoryType,
 
         @NotBlank
-        String imageUrl
+        String imageUrl,
+
+        String investmentYn
 ) {}
