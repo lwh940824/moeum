@@ -27,6 +27,7 @@ public enum ErrorCode {
 
     // 아이템
     NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "존재하지 않는 아이템입니다."),
+    PARENT_CATEGORY_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "아이템은 하위 카테고리에만 등록할 수 있습니다."),
 
     // 결제 수단
     EXISTS_PAYMENT(HttpStatus.CONFLICT, "이미 존재하는 결제수단입니다."),

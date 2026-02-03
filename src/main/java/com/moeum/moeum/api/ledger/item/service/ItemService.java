@@ -110,6 +110,11 @@ public class ItemService {
         Item item = itemMapper.toEntity(itemCreateRequestDto);
 
         Category category = categoryService.getEntity(userId, itemCreateRequestDto.categoryId());
+
+        if (category.getParentCategory() == null && !category.getChildCategoryList().isEmpty()) {
+            throw new CustomException(ErrorCode.PARENT_CATEGORY_NOT_ALLOWED);
+        }
+
         Payment payment = paymentService.getEntity(userId, itemCreateRequestDto.paymentId());
         User user = userService.getEntity(userId);
         Item saved = createInternal(item, user, category, payment, null);
@@ -144,6 +149,12 @@ public class ItemService {
 
     @Transactional
     public ItemResponseDto update(Long userId, Long itemId, ItemUpdateRequestDto itemUpdateRequestDto) {
+        Category category = categoryService.getEntity(userId, itemUpdateRequestDto.categoryId());
+
+        if (category.getParentCategory() == null && !category.getChildCategoryList().isEmpty()) {
+            throw new CustomException(ErrorCode.PARENT_CATEGORY_NOT_ALLOWED);
+        }
+
         Item item = getEntity(userId, itemId);
 
         // 존재하면 무조건 기존 item 금액 빼기
@@ -173,7 +184,6 @@ public class ItemService {
 
         item.update(itemUpdateRequestDto.amount(), itemUpdateRequestDto.occurredAt(), itemUpdateRequestDto.memo());
 
-        Category category = categoryService.getEntity(userId, itemUpdateRequestDto.categoryId());
         Payment payment = paymentService.getEntity(userId, itemUpdateRequestDto.paymentId());
         item.changeCategory(category);
         item.changePayment(payment);
