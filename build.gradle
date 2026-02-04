@@ -23,6 +23,16 @@ repositories {
 	mavenCentral()
 }
 
+def querydslGeneratedDir = "$buildDir/generated/sources/annotationProcessor/java/main"
+
+sourceSets {
+	main {
+		java {
+			srcDir querydslGeneratedDir
+		}
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
