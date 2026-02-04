@@ -1,7 +1,9 @@
 package com.moeum.moeum.api.ledger.investSummary.service;
 
 import com.moeum.moeum.api.ledger.investSummary.dto.InvestSummaryCreateDto;
+import com.moeum.moeum.api.ledger.investSummary.dto.InvestSummaryMonthDto;
 import com.moeum.moeum.api.ledger.investSummary.dto.InvestSummaryResponseDto;
+import com.moeum.moeum.api.ledger.investSummary.dto.InvestSummaryYearDto;
 import com.moeum.moeum.api.ledger.investSummary.mapper.InvestSummaryMapper;
 import com.moeum.moeum.api.ledger.investSummary.repository.InvestSummaryRepository;
 import com.moeum.moeum.api.ledger.item.dto.ItemToSummaryDto;
@@ -11,7 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +29,53 @@ public class InvestSummaryService {
     public List<InvestSummaryResponseDto> getInvestSummaryList(Long investSettingId) {
         return investSummaryRepository.findAllByInvestSettingId(investSettingId).stream()
                 .map(investSummaryMapper::toDto)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvestSummaryYearDto> getInvestSummaryYearList(Long investSettingId) {
+        List<InvestSummaryResponseDto> investSummaryList = investSummaryRepository.findAllByInvestSettingId(investSettingId).stream()
+                .map(investSummaryMapper::toDto)
+                .toList();
+
+        Map<Integer, List<InvestSummaryResponseDto>> yearGroup = investSummaryList.stream()
+                .collect(Collectors.groupingBy(InvestSummaryResponseDto::year));
+
+        return yearGroup.entrySet().stream()
+                .map(entry -> {
+                    Integer year = entry.getKey();
+                    List<InvestSummaryResponseDto> list = entry.getValue();
+                    Long totalPrincipal = list.stream()
+                            .map(InvestSummaryResponseDto::principal)
+                            .filter(java.util.Objects::nonNull)
+                            .mapToLong(Long::longValue)
+                            .sum();
+
+                    List<InvestSummaryMonthDto> months = IntStream.rangeClosed(1, 12)
+                            .mapToObj(m ->
+                                    list.stream()
+                                            .filter(s -> s.month() == m)
+                                            .findFirst()
+                                            .map(s -> InvestSummaryMonthDto.builder()
+                                                    .month(m)
+                                                    .principal(s.principal())
+                                                    .build())
+                                            .orElse(
+                                                    InvestSummaryMonthDto.builder()
+                                                            .month(m)
+                                                            .principal(0L)
+                                                            .build()
+                                            )
+                            )
+                            .toList();
+
+                    return InvestSummaryYearDto.builder()
+                            .year(year)
+                            .months(months)
+                            .totalPrincipal(totalPrincipal)
+                            .build();
+                })
+                .sorted(Comparator.comparing(InvestSummaryYearDto::year))
                 .toList();
     }
 

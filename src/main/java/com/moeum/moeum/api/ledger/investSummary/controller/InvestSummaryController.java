@@ -1,6 +1,7 @@
 package com.moeum.moeum.api.ledger.investSummary.controller;
 
 import com.moeum.moeum.api.ledger.investSummary.dto.InvestSummaryResponseDto;
+import com.moeum.moeum.api.ledger.investSummary.dto.InvestSummaryYearDto;
 import com.moeum.moeum.api.ledger.investSummary.service.InvestSummaryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,10 @@ public class InvestSummaryController {
     @GetMapping("/{investSettingId}")
     public ResponseEntity<List<InvestSummaryResponseDto>> getInvestSummaryList(@PathVariable Long investSettingId) {
         return ResponseEntity.ok(investSummaryService.getInvestSummaryList(investSettingId));
+    }
+
+    @GetMapping("/{investSettingId}/years")
+    public ResponseEntity<List<InvestSummaryYearDto>> getInvestSummaryYearList(@PathVariable Long investSettingId) {
+        return ResponseEntity.ok(investSummaryService.getInvestSummaryYearList(investSettingId));
     }
 }
